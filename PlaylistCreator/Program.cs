@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -95,13 +96,6 @@ namespace PlaylistCreator
 		static void Main(string[] args)
 		{
 			StartProgram(args);
-			Process();
-			EndProgram();
-		}
-
-		#region Methods
-		private static void Process()
-		{
 			CheckFolders();
 			GetAllSongs();
 			CreateGoodList();
@@ -120,8 +114,11 @@ namespace PlaylistCreator
 			WritePlaylistM3U(playlist, "All");
 			WritePlaylistITunes(playlist, "All");
 			WriteHtmlFile(playlist, "All");
+			Process.Start("explorer.exe", playlistFolder);
+			EndProgram();
 		}
 
+		#region Methods
 		private static void CheckFolders()
 		{
 			string[] folders = { @"C:\Music\", @"C:\Music\01 Playlists" };
