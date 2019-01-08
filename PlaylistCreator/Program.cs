@@ -9,12 +9,17 @@ namespace PlaylistCreator
 {
 	class Program
 	{
+		// Config/Settings //
+		const string srcFolder = @"C:\Music\00 Genres\";
+		const string playlistFolder = @"C:\Music\01 Playlists\";
+		private static bool consoleOut = false; // default = false
+		private static DateTime newSongThreshold = DateTime.Now.AddYears(-4);
+		private static HashSet<string> supportedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
+
 		#region Fields
 		// Constants //
 		const int NEW_THRESHOLD = 100;
 		const string EN_US = @"M/d/yyyy h:mmtt";
-		const string srcFolder = @"C:\Music\00 Genres\";
-		const string playlistFolder = @"C:\Music\01 Playlists\";
 
 		// List //
 		private static List<SongFileInfo> playlist = new List<SongFileInfo>();
@@ -25,8 +30,6 @@ namespace PlaylistCreator
 
 		// PIVs //
 		private static DateTime startTime = DateTime.Now;
-		private static HashSet<string> musicExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
-		private static bool consoleOut = false; // default = false
 		private static int maxNewSongs;
 
 		#region Good Songs
@@ -124,7 +127,7 @@ namespace PlaylistCreator
 		{
 			//var srcFolder = @"Y:\Music\00 Genres\Dance & House\"; // TEST only //
 			var dInfo = new DirectoryInfo(srcFolder);
-			var files = dInfo.EnumerateFiles("*.*", SearchOption.AllDirectories).Where(x => musicExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
+			var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
 
 			foreach (var file in files) {
 				//if (consoleOut)
