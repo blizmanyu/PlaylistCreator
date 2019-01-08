@@ -17,30 +17,30 @@ namespace PlaylistCreator
 		private static HashSet<string> supportedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
 
 		#region Fields
-		// Constants //
-		const int NEW_THRESHOLD = 100;
 		const string EN_US = @"M/d/yyyy h:mmtt";
-
-		// List //
 		private static List<SongFileInfo> playlist = new List<SongFileInfo>();
 		private static List<SongFileInfo> allSongs = new List<SongFileInfo>();
 		private static List<SongFileInfo> goodList = new List<SongFileInfo>();
 		private static List<SongFileInfo> newList = new List<SongFileInfo>();
 		private static List<SongFileInfo> newPlusGoodList = new List<SongFileInfo>();
-
-		// PIVs //
 		private static DateTime startTime = DateTime.Now;
-		private static int maxNewSongs;
 
 		#region Good Songs
 		private static HashSet<string> goodSongs = new HashSet<string>() {
+			"All The Shine",
+			"All Of Me",
+			"Blank Space",
 			"Breakeven",
+			"Clarity",
 			"Different",
+			"Everybody Knows",
 			"Feels Like Home",
 			"first day of my life", // gnash //
 			"Give A Little More",
 			"Hands Down (Acoustic)",
+			"Heartbeat",
 			"i hate you, i love you (PBH & Jack Shizzle Remix)",
+			"It Might Be You",
 			"Like A Stone",
 			"Lost & Found",
 			"Love Lost",
@@ -48,15 +48,23 @@ namespace PlaylistCreator
 			"Never Gonna Leave This Bed (Acoustic)",
 			"Never Too Late",
 			"nothing lasts forever",
+			"One Last Time",
+			"Ordinary People",
 			"Our Youth",
 			"Panic Switch",
 			"Piece Of Me",
 			"Say You Love Me",
+			"Style",
+			"Style (Cover)",
 			"Sunday Morning",
 			"Sweetest Goodbye",
 			"The Sun",
+			"Thinkin Bout You",
 			"Through With You",
+			"Who You Are",
+			"Wildest Dreams",
 			"Wildest Moments",
+			"With Or Without You",
 			"won't go home without you",
 		};
 		#endregion
@@ -118,78 +126,42 @@ namespace PlaylistCreator
 		{
 			string[] folders = { @"C:\Music\", @"C:\Music\01 Playlists" };
 
-			foreach (string folder in folders)
-				if (!Directory.Exists(folder))
-					Directory.CreateDirectory(folder);
+			for (int i=0; i<folders.Length; i++)
+				if (!Directory.Exists(folders[i]))
+					Directory.CreateDirectory(folders[i]);
 		}
 
 		private static void GetAllSongs()
 		{
 			//var srcFolder = @"Y:\Music\00 Genres\Dance & House\"; // TEST only //
 			var dInfo = new DirectoryInfo(srcFolder);
-			var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
+			var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase)).ToList();
 
-			foreach (var file in files) {
-				//if (consoleOut)
-				//	Console.Write("\n{0}) {1}", ++count, file.FullName);
-				allSongs.Add(new SongFileInfo(file));
-			}
-
-			maxNewSongs = (int) Math.Round(allSongs.Count * .1, 0, MidpointRounding.AwayFromZero);
-			if (consoleOut) {
-				Console.Write("\n");
-				Console.Write("\nAllSongs.Count: {0}", allSongs.Count);
-				Console.Write("\n   MaxNewSongs: {0}", maxNewSongs);
-			}
+			for (int i = 0; i < files.Count; i++)
+				allSongs.Add(new SongFileInfo(files[i]));
 		}
 
 		private static void RemoveExclusionArtists()
 		{
 			allSongs = allSongs.Except(allSongs.Where(x => badArtists.Contains(x.Artist, StringComparer.OrdinalIgnoreCase)).ToList()).ToList();
-
-			maxNewSongs = (int) Math.Round(allSongs.Count * .1, 0, MidpointRounding.AwayFromZero);
-			if (consoleOut) {
-				Console.Write("\n");
-				Console.Write("\nAllSongs.Count: {0}", allSongs.Count);
-				Console.Write("\n   MaxNewSongs: {0}", maxNewSongs);
-			}
 		}
 
 		private static void CreateGoodList()
 		{
 			goodList = allSongs.Where(x => goodSongs.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).ToList();
 			allSongs = allSongs.Except(goodList).ToList();
-
-			//if (consoleOut) {
-			//	Console.Write("\n");
-			//	goodList.ForEach(x => Console.Write("\n{0} - {1}", x.Artist, x.Title));
-			//	Console.Write("\n");
-			//}
-
-			maxNewSongs -= goodList.Count;
-			if (consoleOut) {
-				Console.Write("\n");
-				Console.Write("\nGoodList.Count: {0}", goodList.Count);
-				Console.Write("\n   MaxNewSongs: {0}", maxNewSongs);
-				Console.Write("\nAllSongs.Count: {0}", allSongs.Count);
-			}
 		}
 
 		private static void CreateNewList()
 		{
-			var year = startTime.Year;
-			var month = startTime.Month;
-			var startMonth = new DateTime(year - 1, month, 1);
-
-			newList = allSongs.Where(x => x.Date >= startMonth).ToList();
+			newList = allSongs.Where(x => newSongThreshold < x.Date).ToList();
 			allSongs = allSongs.Except(newList).ToList();
 
 			#region Logging
 			if (consoleOut) {
-				Console.Write("\n{0}: {1} songs", startMonth.ToShortDateString(), newList.Count);
+				Console.Write("\n{0}: {1} songs", newSongThreshold.ToShortDateString(), newList.Count);
 				Console.Write("\n");
 				Console.Write("\n NewList.Count: {0}", newList.Count);
-				Console.Write("\n   MaxNewSongs: {0}", maxNewSongs);
 				Console.Write("\nAllSongs.Count: {0}", allSongs.Count);
 			}
 			#endregion
