@@ -13,7 +13,7 @@ namespace PlaylistCreator
 		// Config/Settings //
 		const string srcFolder = @"C:\Music\00 Genres\";
 		const string playlistFolder = @"C:\Music\01 Playlists\";
-		private static bool consoleOut = false; // default = false
+		private static bool consoleOut = true; // default = false
 		private static DateTime newSongThreshold = DateTime.Now.AddYears(-4);
 		private static HashSet<string> supportedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
 
@@ -70,15 +70,7 @@ namespace PlaylistCreator
 		};
 		#endregion
 
-		#region Folder Exclusions
-		private static HashSet<string> folderExclusions = new HashSet<string>() {
-			"Album",
-			"Classical",
-			"J-Pop",
-			"J-Rap",
-			"Spanish",
-		};
-		#endregion
+		private static HashSet<string> folderExclusions = new HashSet<string>() { @"\Album\", @"\Classical\", @"\J-Pop\", @"\J-Rap\", @"\Spanish\", };
 
 		#region Exclude Artists
 		private static HashSet<string> badArtists = new HashSet<string>() {
@@ -96,25 +88,32 @@ namespace PlaylistCreator
 		static void Main(string[] args)
 		{
 			StartProgram(args);
-			CheckFolders();
-			GetAllSongs();
-			CreateGoodList();
-			RemoveExclusionArtists();
-			CreateNewList();
-			CreateNewPlusGoodList();
-			var writeGoodList = true;
-			#region Sort & Create Good List
-			if (writeGoodList) {
-				goodList = goodList.OrderBy(x => x.Title).ThenBy(y => y.AlbumArtist).ToList();
-				WritePlaylistM3U(goodList, "Good");
-				WritePlaylistITunes(goodList, "Good");
+
+			var testFolder = @"C:\Music\";
+			var filenames = Directory.EnumerateFiles(testFolder, "*", SearchOption.TopDirectoryOnly);
+			foreach (var filename in filenames) {
+				Console.Write("\n{0}", filename);
 			}
-			#endregion
-			CreatePlaylist();
-			WritePlaylistM3U(playlist, "All");
-			WritePlaylistITunes(playlist, "All");
-			WriteHtmlFile(playlist, "All");
-			Process.Start("explorer.exe", playlistFolder);
+
+			//CheckFolders();
+			//GetAllSongs();
+			//CreateGoodList();
+			//RemoveExclusionArtists();
+			//CreateNewList();
+			//CreateNewPlusGoodList();
+			//var writeGoodList = true;
+			//#region Sort & Create Good List
+			//if (writeGoodList) {
+			//	goodList = goodList.OrderBy(x => x.Title).ThenBy(y => y.AlbumArtist).ToList();
+			//	WritePlaylistM3U(goodList, "Good");
+			//	WritePlaylistITunes(goodList, "Good");
+			//}
+			//#endregion
+			//CreatePlaylist();
+			//WritePlaylistM3U(playlist, "All");
+			//WritePlaylistITunes(playlist, "All");
+			//WriteHtmlFile(playlist, "All");
+			Process.Start("explorer.exe", testFolder);
 			EndProgram();
 		}
 
@@ -131,11 +130,13 @@ namespace PlaylistCreator
 		private static void GetAllSongs()
 		{
 			//var srcFolder = @"Y:\Music\00 Genres\Dance & House\"; // TEST only //
+			//var filenames = Directory.EnumerateFiles(srcFolder, "*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.))
 			var dInfo = new DirectoryInfo(srcFolder);
-			var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase)).ToList();
+			var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
 
-			for (int i = 0; i < files.Count; i++)
-				allSongs.Add(new SongFileInfo(files[i]));
+			foreach (var file in files) {
+				allSongs.Add(new SongFileInfo(file));
+			}
 		}
 
 		private static void RemoveExclusionArtists()
