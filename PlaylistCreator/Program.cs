@@ -88,13 +88,6 @@ namespace PlaylistCreator
 		static void Main(string[] args)
 		{
 			StartProgram(args);
-
-			var testFolder = @"C:\Music\";
-			var filenames = Directory.EnumerateFiles(testFolder, "*", SearchOption.TopDirectoryOnly);
-			foreach (var filename in filenames) {
-				Console.Write("\n{0}", filename);
-			}
-
 			//CheckFolders();
 			//GetAllSongs();
 			//CreateGoodList();
@@ -113,7 +106,7 @@ namespace PlaylistCreator
 			//WritePlaylistM3U(playlist, "All");
 			//WritePlaylistITunes(playlist, "All");
 			//WriteHtmlFile(playlist, "All");
-			Process.Start("explorer.exe", testFolder);
+			Process.Start("explorer.exe", playlistFolder);
 			EndProgram();
 		}
 
@@ -130,7 +123,6 @@ namespace PlaylistCreator
 		private static void GetAllSongs()
 		{
 			//var srcFolder = @"Y:\Music\00 Genres\Dance & House\"; // TEST only //
-			//var filenames = Directory.EnumerateFiles(srcFolder, "*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.))
 			var dInfo = new DirectoryInfo(srcFolder);
 			var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
 
