@@ -43,6 +43,9 @@
     <Reference Include="taglib-sharp">
       <HintPath>..\taglib-sharp.dll</HintPath>
     </Reference>
+    <Reference Include="Yutaka.IO">
+      <HintPath>..\..\Yutaka\Libraries\Yutaka.IO\bin\Release\Yutaka.IO.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

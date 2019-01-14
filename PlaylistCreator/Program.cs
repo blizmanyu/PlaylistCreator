@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Yutaka.IO;
 
 namespace PlaylistCreator
 {
@@ -88,6 +89,7 @@ namespace PlaylistCreator
 		static void Main(string[] args)
 		{
 			StartProgram(args);
+			GetAllSongs();
 			//CheckFolders();
 			//GetAllSongs();
 			//CreateGoodList();
@@ -122,13 +124,19 @@ namespace PlaylistCreator
 
 		private static void GetAllSongs()
 		{
-			//var srcFolder = @"Y:\Music\00 Genres\Dance & House\"; // TEST only //
-			var dInfo = new DirectoryInfo(srcFolder);
-			var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
+			#region Test
+			var srcFolder = @"C:\Music\";
+			var files = FileUtil.GetAllAudioFiles(srcFolder, ignoreFolders: folderExclusions.ToArray());
+			for (int i=0; i<files.Count; i++)
+				Console.Write("\n{0}) {1}", i+1, files[i]);
+			#endregion Test
 
-			foreach (var file in files) {
-				allSongs.Add(new SongFileInfo(file));
-			}
+			//var dInfo = new DirectoryInfo(srcFolder);
+			//var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
+
+			//foreach (var file in files) {
+			//	allSongs.Add(new SongFileInfo(file));
+			//}
 		}
 
 		private static void RemoveExclusionArtists()
