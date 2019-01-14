@@ -71,7 +71,7 @@ namespace PlaylistCreator
 		};
 		#endregion
 
-		private static HashSet<string> folderExclusions = new HashSet<string>() { @"\Album\", @"\Classical\", @"\J-Pop\", @"\J-Rap\", @"\Spanish\", };
+		private static HashSet<string> folderExclusions = new HashSet<string>() { @"\Album", @"\Classical", @"\J-Pop", @"\J-Rap", @"\Spanish", };
 
 		#region Exclude Artists
 		private static HashSet<string> badArtists = new HashSet<string>() {
@@ -108,7 +108,7 @@ namespace PlaylistCreator
 			//WritePlaylistM3U(playlist, "All");
 			//WritePlaylistITunes(playlist, "All");
 			//WriteHtmlFile(playlist, "All");
-			Process.Start("explorer.exe", playlistFolder);
+			//Process.Start("explorer.exe", @"C:\Music\");
 			EndProgram();
 		}
 
@@ -125,8 +125,8 @@ namespace PlaylistCreator
 		private static void GetAllSongs()
 		{
 			#region Test
-			var srcFolder = @"C:\Music\";
-			var files = FileUtil.GetAllAudioFiles(srcFolder, ignoreFolders: folderExclusions.ToArray());
+			//var srcFolder = @"C:\Music\";
+			var files = FileUtil.GetAllAudioFiles(srcFolder, folderExclusions.ToArray());
 			for (int i=0; i<files.Count; i++)
 				Console.Write("\n{0}) {1}", i+1, files[i]);
 			#endregion Test
