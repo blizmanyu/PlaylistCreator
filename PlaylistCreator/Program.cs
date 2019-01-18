@@ -128,7 +128,7 @@ namespace PlaylistCreator
 			//var srcFolder = @"C:\Music\";
 			var files = FileUtil.GetAllAudioFiles(srcFolder, folderExclusions.ToArray());
 			for (int i=0; i<files.Count; i++)
-				Console.Write("\n{0}) {1}", i+1, files[i]);
+				allSongs.Add(new SongFileInfo(files[i]));
 			#endregion Test
 
 			//var dInfo = new DirectoryInfo(srcFolder);
