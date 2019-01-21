@@ -133,6 +133,14 @@ namespace PlaylistCreator
 				allSongs.Add(new SongFileInfo(files[i]));
 		}
 
+		private static void GetAllJpop()
+		{
+			var folder = @"C:\Music\00 Genres\J-Pop\";
+			var files = FileUtil.GetAllAudioFiles(folder);
+			for (int i = 0; i < files.Count; i++)
+				allJpop.Add(new SongFileInfo(files[i]));
+		}
+
 		private static void RemoveExclusionArtists()
 		{
 			allSongs = allSongs.Except(allSongs.Where(x => badArtists.Contains(x.Artist, StringComparer.OrdinalIgnoreCase)).ToList()).ToList();
