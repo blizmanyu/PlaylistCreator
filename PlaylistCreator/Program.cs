@@ -15,19 +15,20 @@ namespace PlaylistCreator
 		const string srcFolder = @"C:\Music\00 Genres\";
 		const string playlistFolder = @"C:\Music\01 Playlists\";
 		private static bool consoleOut = true; // default = false
-		private static DateTime newSongThreshold = DateTime.Now.AddYears(-4);
+		private static DateTime newSongThreshold = DateTime.Now.AddYears(-1);
 		private static HashSet<string> supportedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
 
 		#region Fields
 		const string EN_US = @"M/d/yyyy h:mmtt";
 		private static List<SongFileInfo> playlist = new List<SongFileInfo>();
 		private static List<SongFileInfo> allSongs = new List<SongFileInfo>();
+		private static List<SongFileInfo> allJpop = new List<SongFileInfo>();
+		private static List<SongFileInfo> goodJpopList = new List<SongFileInfo>();
 		private static List<SongFileInfo> goodList = new List<SongFileInfo>();
 		private static List<SongFileInfo> newList = new List<SongFileInfo>();
 		private static List<SongFileInfo> newPlusGoodList = new List<SongFileInfo>();
 		private static DateTime startTime = DateTime.Now;
 
-		#region Good Songs
 		private static HashSet<string> goodSongs = new HashSet<string>() {
 			"All The Shine",
 			"All Of Me",
@@ -43,6 +44,7 @@ namespace PlaylistCreator
 			"Heartbeat",
 			"i hate you, i love you (PBH & Jack Shizzle Remix)",
 			"It Might Be You",
+			"Kiss From A Rose",
 			"Like A Stone",
 			"Lost & Found",
 			"Love Lost",
@@ -69,7 +71,9 @@ namespace PlaylistCreator
 			"With Or Without You",
 			"won't go home without you",
 		};
-		#endregion
+		private static HashSet<string> goodJpop = new HashSet<string>() {
+			"asdf",
+		};
 
 		private static HashSet<string> folderExclusions = new HashSet<string>() { @"\Album", @"\Classical", @"\J-Pop", @"\J-Rap", @"\Spanish", };
 
@@ -89,25 +93,24 @@ namespace PlaylistCreator
 		static void Main(string[] args)
 		{
 			StartProgram(args);
+			CheckFolders();
 			GetAllSongs();
-			//CheckFolders();
-			//GetAllSongs();
-			//CreateGoodList();
-			//RemoveExclusionArtists();
-			//CreateNewList();
-			//CreateNewPlusGoodList();
-			//var writeGoodList = true;
-			//#region Sort & Create Good List
-			//if (writeGoodList) {
-			//	goodList = goodList.OrderBy(x => x.Title).ThenBy(y => y.AlbumArtist).ToList();
-			//	WritePlaylistM3U(goodList, "Good");
-			//	WritePlaylistITunes(goodList, "Good");
-			//}
-			//#endregion
-			//CreatePlaylist();
-			//WritePlaylistM3U(playlist, "All");
-			//WritePlaylistITunes(playlist, "All");
-			//WriteHtmlFile(playlist, "All");
+			CreateGoodList();
+			RemoveExclusionArtists();
+			CreateNewList();
+			CreateNewPlusGoodList();
+			var writeGoodList = true;
+			#region Sort & Create Good List
+			if (writeGoodList) {
+				goodList = goodList.OrderBy(x => x.Title).ThenBy(y => y.AlbumArtist).ToList();
+				WritePlaylistM3U(goodList, "Good");
+				WritePlaylistITunes(goodList, "Good");
+			}
+			#endregion
+			CreatePlaylist();
+			WritePlaylistM3U(playlist, "All");
+			WritePlaylistITunes(playlist, "All");
+			WriteHtmlFile(playlist, "All");
 			//Process.Start("explorer.exe", @"C:\Music\");
 			EndProgram();
 		}
@@ -124,19 +127,10 @@ namespace PlaylistCreator
 
 		private static void GetAllSongs()
 		{
-			#region Test
-			//var srcFolder = @"C:\Music\";
+			//var srcFolder = @"C:\Music\"; // for testing only //
 			var files = FileUtil.GetAllAudioFiles(srcFolder, folderExclusions.ToArray());
-			for (int i=0; i<files.Count; i++)
+			for (int i = 0; i < files.Count; i++)
 				allSongs.Add(new SongFileInfo(files[i]));
-			#endregion Test
-
-			//var dInfo = new DirectoryInfo(srcFolder);
-			//var files = dInfo.EnumerateFiles("*", SearchOption.AllDirectories).Where(x => supportedExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Name, StringComparer.OrdinalIgnoreCase) && !folderExclusions.Contains(x.Directory.Parent.Name, StringComparer.OrdinalIgnoreCase));
-
-			//foreach (var file in files) {
-			//	allSongs.Add(new SongFileInfo(file));
-			//}
 		}
 
 		private static void RemoveExclusionArtists()
@@ -148,6 +142,12 @@ namespace PlaylistCreator
 		{
 			goodList = allSongs.Where(x => goodSongs.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).ToList();
 			allSongs = allSongs.Except(goodList).ToList();
+		}
+
+		private static void CreateGoodJpopList()
+		{
+			goodJpopList = allJpop.Where(x => goodJpop.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).ToList();
+			allJpop = allJpop.Except(goodJpopList).ToList();
 		}
 
 		private static void CreateNewList()
@@ -191,9 +191,13 @@ namespace PlaylistCreator
 			}
 
 			allSongs = allSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+			var goodInd = 0;
 
 			for (int i = 0; i < allSongs.Count - 2; i++) {
-				playlist.Add(newPlusGoodList[i % newPlusGoodListCount]);
+				if (goodInd == newPlusGoodListCount)
+					goodInd = 0;
+				playlist.Add(newPlusGoodList[goodInd]);
+				goodInd++;
 				playlist.Add(allSongs[i]);
 				playlist.Add(allSongs[i + 1]);
 				playlist.Add(allSongs[i + 2]);
@@ -213,10 +217,7 @@ namespace PlaylistCreator
 
 		private static void WritePlaylistITunes(List<SongFileInfo> songs, string filename, bool timestamp = true)
 		{
-			if (timestamp)
-				filename += DateTime.Now.ToString("yyyy MMdd HHmm ssff");
-			filename += ".txt";
-			var dest = playlistFolder + filename;
+			var dest = String.Format("{0}{1}{2}.txt", playlistFolder, filename, timestamp ? DateTime.Now.ToString(" yyyy MMdd HHmm ssff") : "");
 			var fileHeader = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 			File.WriteAllText(dest, fileHeader, Encoding.Default);
 
@@ -228,10 +229,7 @@ namespace PlaylistCreator
 
 		private static void WritePlaylistM3U(List<SongFileInfo> songs, string filename, bool timestamp = true)
 		{
-			if (timestamp)
-				filename += DateTime.Now.ToString("yyyy MMdd HHmm ssff");
-			filename += ".m3u";
-			var dest = playlistFolder + filename;
+			var dest = String.Format("{0}{1}{2}.m3u", playlistFolder, filename, timestamp ? DateTime.Now.ToString(" yyyy MMdd HHmm ssff") : "");
 			var fileHeader = "#EXTM3U";
 			File.WriteAllText(dest, fileHeader, Encoding.Default);
 
@@ -249,10 +247,7 @@ namespace PlaylistCreator
 			var googleUrl = "https://www.google.com/search?q=";
 			songs = songs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 
-			if (timestamp)
-				filename += DateTime.Now.ToString("yyyy MMdd HHmm ssff");
-			filename += ".html";
-			var dest = playlistFolder + filename;
+			var dest = String.Format("{0}{1}{2}.html", playlistFolder, filename, timestamp ? DateTime.Now.ToString(" yyyy MMdd HHmm ssff") : "");
 			var fileHeader = "";
 			File.WriteAllText(dest, fileHeader, Encoding.Default);
 
