@@ -21,6 +21,7 @@ namespace PlaylistCreator
 		#region Fields
 		const string EN_US = @"M/d/yyyy h:mmtt";
 		private static List<SongFileInfo> playlist = new List<SongFileInfo>();
+		private static List<SongFileInfo> playlistJpop = new List<SongFileInfo>();
 		private static List<SongFileInfo> allSongs = new List<SongFileInfo>();
 		private static List<SongFileInfo> allJpop = new List<SongFileInfo>();
 		private static List<SongFileInfo> goodJpopList = new List<SongFileInfo>();
@@ -72,7 +73,7 @@ namespace PlaylistCreator
 			"won't go home without you",
 		};
 		private static HashSet<string> goodJpop = new HashSet<string>() {
-			"asdf",
+			"asu e no tobira",
 		};
 
 		private static HashSet<string> folderExclusions = new HashSet<string>() { @"\Album", @"\Classical", @"\J-Pop", @"\J-Rap", @"\Spanish", };
@@ -110,8 +111,12 @@ namespace PlaylistCreator
 			CreatePlaylist();
 			WritePlaylistM3U(playlist, "All");
 			WritePlaylistITunes(playlist, "All");
-			WriteHtmlFile(playlist, "All");
+			//WriteHtmlFile(playlist, "All");
 			//Process.Start("explorer.exe", @"C:\Music\");
+			#region J-Pop
+			GetAllJpop();
+			CreateGoodJpopList();
+			#endregion J-Pop
 			EndProgram();
 		}
 
@@ -203,6 +208,33 @@ namespace PlaylistCreator
 
 			for (int i = 0; i < allSongs.Count - 2; i++) {
 				if (goodInd == newPlusGoodListCount)
+					goodInd = 0;
+				playlist.Add(newPlusGoodList[goodInd]);
+				goodInd++;
+				playlist.Add(allSongs[i]);
+				playlist.Add(allSongs[i + 1]);
+				playlist.Add(allSongs[i + 2]);
+				i = i + 2;
+			}
+
+			if (consoleOut) {
+				Console.Write("\n");
+				var temp = newPlusGoodListCount * 2;
+				for (int i = 0; i < playlist.Count; i++) {
+					if (i % temp == 0 && i / temp > 0)
+						Console.Write("\n\n============================\n");
+					Console.Write("\n{0}) {1} - {2}", i + 1, playlist[i].Artist, playlist[i].Title);
+				}
+			}
+		}
+
+		private static void CreatePlaylistJpop()
+		{
+			allJpop = allJpop.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+			var goodInd = 0;
+
+			for (int i = 0; i < allSongs.Count - 2; i++) {
+				if (goodInd == goodJpopList.Count)
 					goodInd = 0;
 				playlist.Add(newPlusGoodList[goodInd]);
 				goodInd++;
