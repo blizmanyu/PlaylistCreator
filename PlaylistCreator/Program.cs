@@ -15,16 +15,14 @@ namespace PlaylistCreator
 		const string srcFolder = @"C:\Music\00 Genres\";
 		const string playlistFolder = @"C:\Music\01 Playlists\";
 		private static bool consoleOut = true; // default = false
+		private static bool doJpop = true;
 		private static DateTime newSongThreshold = DateTime.Now.AddYears(-1);
 		private static HashSet<string> supportedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
 
 		#region Fields
 		const string EN_US = @"M/d/yyyy h:mmtt";
 		private static List<SongFileInfo> playlist = new List<SongFileInfo>();
-		private static List<SongFileInfo> playlistJpop = new List<SongFileInfo>();
 		private static List<SongFileInfo> allSongs = new List<SongFileInfo>();
-		private static List<SongFileInfo> allJpop = new List<SongFileInfo>();
-		private static List<SongFileInfo> goodJpopList = new List<SongFileInfo>();
 		private static List<SongFileInfo> goodList = new List<SongFileInfo>();
 		private static List<SongFileInfo> newList = new List<SongFileInfo>();
 		private static List<SongFileInfo> newPlusGoodList = new List<SongFileInfo>();
@@ -72,9 +70,6 @@ namespace PlaylistCreator
 			"With Or Without You",
 			"won't go home without you",
 		};
-		private static HashSet<string> goodJpop = new HashSet<string>() {
-			"asu e no tobira",
-		};
 
 		private static HashSet<string> folderExclusions = new HashSet<string>() { @"\Album", @"\Classical", @"\J-Pop", @"\J-Rap", @"\Spanish", };
 
@@ -89,6 +84,19 @@ namespace PlaylistCreator
 			"Wolfgang Amadeus Mozart",
 		};
 		#endregion
+
+		#region J-Pop
+		private static List<SongFileInfo> allSongsJpop = new List<SongFileInfo>();
+		private static List<SongFileInfo> playlistJpop = new List<SongFileInfo>();
+		private static List<SongFileInfo> goodListJpop = new List<SongFileInfo>();
+		private static List<SongFileInfo> jpopChristmas = new List<SongFileInfo>();
+		private static List<SongFileInfo> jpopFallWinter = new List<SongFileInfo>();
+		private static List<SongFileInfo> jpopSpringSummer = new List<SongFileInfo>();
+		private static HashSet<string> goodSongsJpop = new HashSet<string>() {
+			"asu e no tobira",
+		};
+		private static HashSet<string> folderExclusionsJpop = new HashSet<string>() { @"\_Album", @"_Christmas", @"_FallWinter", @"_SpringSummer" };
+		#endregion J-Pop
 		#endregion Fields
 
 		static void Main(string[] args)
@@ -121,6 +129,55 @@ namespace PlaylistCreator
 		}
 
 		#region Methods
+		#region J-Pop
+		private static void GetAllJpop()
+		{
+			var folder = @"C:\Music\00 Genres\J-Pop\";
+			var files = FileUtil.GetAllAudioFiles(folder, folderExclusionsJpop.ToArray());
+			for (int i = 0; i < files.Count; i++)
+				allSongsJpop.Add(new SongFileInfo(files[i]));
+
+			// Christmas //
+			folder = @"C:\Music\00 Genres\J-Pop\_Christmas";
+			files = FileUtil.GetAllAudioFiles(folder);
+			for (int i = 0; i < files.Count; i++)
+				allSongsJpop.Add(new SongFileInfo(files[i]));
+		}
+
+		private static void CreateSeasonalJpop()
+		{
+			jpopChristmas = 
+		}
+
+		private static void CreateGoodListJpop()
+		{
+			goodListJpop = allSongsJpop.Where(x => goodSongsJpop.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).ToList();
+			allSongsJpop = allSongsJpop.Except(goodListJpop).ToList();
+		}
+
+		private static void CreatePlaylistJpop()
+		{
+			var goodListJpopCount = goodListJpop.Count;
+			allSongsJpop = allSongsJpop.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+			var goodInd = 0;
+
+			for (int i = 0; i < allSongsJpop.Count - 2; i++) {
+				if (goodInd == goodListJpopCount)
+					goodInd = 0;
+				playlistJpop.Add(goodListJpop[goodInd]);
+				goodInd++;
+				playlistJpop.Add(allSongsJpop[i]);
+				playlistJpop.Add(allSongsJpop[i + 1]);
+				playlistJpop.Add(allSongsJpop[i + 2]);
+				i = i + 2;
+			}
+		}
+
+		private static void DoJpop()
+		{
+
+		}
+		#endregion J-Pop
 		private static void CheckFolders()
 		{
 			string[] folders = { @"C:\Music\", @"C:\Music\01 Playlists" };
@@ -138,14 +195,6 @@ namespace PlaylistCreator
 				allSongs.Add(new SongFileInfo(files[i]));
 		}
 
-		private static void GetAllJpop()
-		{
-			var folder = @"C:\Music\00 Genres\J-Pop\";
-			var files = FileUtil.GetAllAudioFiles(folder);
-			for (int i = 0; i < files.Count; i++)
-				allJpop.Add(new SongFileInfo(files[i]));
-		}
-
 		private static void RemoveExclusionArtists()
 		{
 			allSongs = allSongs.Except(allSongs.Where(x => badArtists.Contains(x.Artist, StringComparer.OrdinalIgnoreCase)).ToList()).ToList();
@@ -155,12 +204,6 @@ namespace PlaylistCreator
 		{
 			goodList = allSongs.Where(x => goodSongs.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).ToList();
 			allSongs = allSongs.Except(goodList).ToList();
-		}
-
-		private static void CreateGoodJpopList()
-		{
-			goodJpopList = allJpop.Where(x => goodJpop.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).ToList();
-			allJpop = allJpop.Except(goodJpopList).ToList();
 		}
 
 		private static void CreateNewList()
@@ -208,33 +251,6 @@ namespace PlaylistCreator
 
 			for (int i = 0; i < allSongs.Count - 2; i++) {
 				if (goodInd == newPlusGoodListCount)
-					goodInd = 0;
-				playlist.Add(newPlusGoodList[goodInd]);
-				goodInd++;
-				playlist.Add(allSongs[i]);
-				playlist.Add(allSongs[i + 1]);
-				playlist.Add(allSongs[i + 2]);
-				i = i + 2;
-			}
-
-			if (consoleOut) {
-				Console.Write("\n");
-				var temp = newPlusGoodListCount * 2;
-				for (int i = 0; i < playlist.Count; i++) {
-					if (i % temp == 0 && i / temp > 0)
-						Console.Write("\n\n============================\n");
-					Console.Write("\n{0}) {1} - {2}", i + 1, playlist[i].Artist, playlist[i].Title);
-				}
-			}
-		}
-
-		private static void CreatePlaylistJpop()
-		{
-			allJpop = allJpop.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-			var goodInd = 0;
-
-			for (int i = 0; i < allSongs.Count - 2; i++) {
-				if (goodInd == goodJpopList.Count)
 					goodInd = 0;
 				playlist.Add(newPlusGoodList[goodInd]);
 				goodInd++;
