@@ -86,7 +86,6 @@ namespace PlaylistCreator
 		#endregion
 
 		#region J-Pop
-		private static List<SongFileInfo> allSongsJpop = new List<SongFileInfo>();
 		private static List<SongFileInfo> playlistJpop = new List<SongFileInfo>();
 		private static List<SongFileInfo> goodListJpop = new List<SongFileInfo>();
 		private static List<SongFileInfo> jpopChristmas = new List<SongFileInfo>();
@@ -132,21 +131,19 @@ namespace PlaylistCreator
 		#region J-Pop
 		private static void GetAllJpop()
 		{
+			List<string> files;
+			string[] exclusions;
 			var folder = @"C:\Music\00 Genres\J-Pop\";
-			var files = FileUtil.GetAllAudioFiles(folder, folderExclusionsJpop.ToArray());
-			for (int i = 0; i < files.Count; i++)
-				allSongsJpop.Add(new SongFileInfo(files[i]));
 
-			// Christmas //
-			folder = @"C:\Music\00 Genres\J-Pop\_Christmas";
-			files = FileUtil.GetAllAudioFiles(folder);
+			exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
+			files = FileUtil.GetAllAudioFiles(folder, exclusions);
 			for (int i = 0; i < files.Count; i++)
-				allSongsJpop.Add(new SongFileInfo(files[i]));
-		}
+				jpopSpringSummer.Add(new SongFileInfo(files[i]));
 
-		private static void CreateSeasonalJpop()
-		{
-			jpopChristmas = 
+			exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
+			files = FileUtil.GetAllAudioFiles(folder, exclusions);
+			for (int i = 0; i < files.Count; i++)
+				jpopFallWinter.Add(new SongFileInfo(files[i]));
 		}
 
 		private static void CreateGoodListJpop()
