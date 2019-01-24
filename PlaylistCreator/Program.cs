@@ -15,6 +15,7 @@ namespace PlaylistCreator
 		const string srcFolder = @"C:\Music\00 Genres\";
 		const string playlistFolder = @"C:\Music\01 Playlists\";
 		private static bool consoleOut = true; // default = false
+		private static bool doEnglish = false;
 		private static bool doJpop = true;
 		private static DateTime newSongThreshold = DateTime.Now.AddYears(-1);
 		private static HashSet<string> supportedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
@@ -86,22 +87,46 @@ namespace PlaylistCreator
 		#endregion
 
 		#region J-Pop
-		private static List<SongFileInfo> playlistJpop = new List<SongFileInfo>();
+		private static List<SongFileInfo> playlistJpopFallWinter = new List<SongFileInfo>();
+		private static List<SongFileInfo> playlistJpopSpringSummer = new List<SongFileInfo>();
 		private static List<SongFileInfo> goodListJpop = new List<SongFileInfo>();
 		private static List<SongFileInfo> jpopChristmas = new List<SongFileInfo>();
 		private static List<SongFileInfo> jpopFallWinter = new List<SongFileInfo>();
 		private static List<SongFileInfo> jpopSpringSummer = new List<SongFileInfo>();
+		private static HashSet<string> folderExclusionsJpop = new HashSet<string>() { @"\_Album", @"_Christmas", @"_FallWinter", @"_SpringSummer" };
 		private static HashSet<string> goodSongsJpop = new HashSet<string>() {
 			"asu e no tobira",
+			"Everything (It's you)",
+			"hana",
+			"kuchibue",
+			"kurumi",
+			"mirai",
+			"namonaki uta",
+			"owarinaki tabi",
+			"te no hira",
+			"yasashii uta",
+			"youthful days",
 		};
-		private static HashSet<string> folderExclusionsJpop = new HashSet<string>() { @"\_Album", @"_Christmas", @"_FallWinter", @"_SpringSummer" };
 		#endregion J-Pop
 		#endregion Fields
 
 		static void Main(string[] args)
 		{
 			StartProgram(args);
+
 			CheckFolders();
+			if (doEnglish)
+				DoEnglish();
+			Process.Start("explorer.exe", @"C:\Music\");
+			if (doJpop)
+				DoJpop();
+
+			EndProgram();
+		}
+
+		#region Methods
+		private static void DoEnglish()
+		{
 			GetAllSongs();
 			CreateGoodList();
 			RemoveExclusionArtists();
@@ -119,17 +144,22 @@ namespace PlaylistCreator
 			WritePlaylistM3U(playlist, "All");
 			WritePlaylistITunes(playlist, "All");
 			//WriteHtmlFile(playlist, "All");
-			//Process.Start("explorer.exe", @"C:\Music\");
-			#region J-Pop
-			GetAllJpop();
-			CreateGoodJpopList();
-			#endregion J-Pop
-			EndProgram();
 		}
 
-		#region Methods
 		#region J-Pop
-		private static void GetAllJpop()
+		private static void DoJpop()
+		{
+			GetAllSongsJpop();
+			CreateGoodListJpop();
+			CreatePlaylistJpop();
+			WritePlaylistM3U(jpopFallWinter, "J-Pop Fall Winter");
+			WritePlaylistITunes(jpopFallWinter, "J-Pop Fall Winter");
+			WritePlaylistM3U(jpopSpringSummer, "J-Pop Spring Summer");
+			WritePlaylistITunes(jpopSpringSummer, "J-Pop Spring Summer");
+			//WriteHtmlFile(playlist, "All");
+		}
+
+		private static void GetAllSongsJpop()
 		{
 			List<string> files;
 			string[] exclusions;
@@ -148,33 +178,46 @@ namespace PlaylistCreator
 
 		private static void CreateGoodListJpop()
 		{
-			goodListJpop = allSongsJpop.Where(x => goodSongsJpop.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).ToList();
-			allSongsJpop = allSongsJpop.Except(goodListJpop).ToList();
+			goodListJpop = jpopSpringSummer.Where(x => goodSongsJpop.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+			jpopSpringSummer = jpopSpringSummer.Except(goodListJpop).ToList();
+			jpopFallWinter = jpopFallWinter.Except(goodListJpop).ToList();
 		}
 
 		private static void CreatePlaylistJpop()
 		{
+			int goodInd;
 			var goodListJpopCount = goodListJpop.Count;
-			allSongsJpop = allSongsJpop.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-			var goodInd = 0;
 
-			for (int i = 0; i < allSongsJpop.Count - 2; i++) {
+			jpopFallWinter = jpopFallWinter.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+			goodInd = 0;
+
+			for (int i = 0; i < jpopFallWinter.Count - 2; i++) {
 				if (goodInd == goodListJpopCount)
 					goodInd = 0;
-				playlistJpop.Add(goodListJpop[goodInd]);
+				playlistJpopFallWinter.Add(goodListJpop[goodInd]);
 				goodInd++;
-				playlistJpop.Add(allSongsJpop[i]);
-				playlistJpop.Add(allSongsJpop[i + 1]);
-				playlistJpop.Add(allSongsJpop[i + 2]);
+				playlistJpopFallWinter.Add(jpopFallWinter[i]);
+				playlistJpopFallWinter.Add(jpopFallWinter[i + 1]);
+				playlistJpopFallWinter.Add(jpopFallWinter[i + 2]);
 				i = i + 2;
 			}
-		}
 
-		private static void DoJpop()
-		{
+			//jpopSpringSummer = jpopSpringSummer.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+			//goodInd = 0;
 
+			//for (int i = 0; i < jpopSpringSummer.Count - 2; i++) {
+			//	if (goodInd == goodListJpopCount)
+			//		goodInd = 0;
+			//	playlistJpopSpringSummer.Add(goodListJpop[goodInd]);
+			//	goodInd++;
+			//	playlistJpopSpringSummer.Add(jpopSpringSummer[i]);
+			//	playlistJpopSpringSummer.Add(jpopSpringSummer[i + 1]);
+			//	playlistJpopSpringSummer.Add(jpopSpringSummer[i + 2]);
+			//	i = i + 2;
+			//}
 		}
 		#endregion J-Pop
+
 		private static void CheckFolders()
 		{
 			string[] folders = { @"C:\Music\", @"C:\Music\01 Playlists" };
