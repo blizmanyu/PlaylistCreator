@@ -97,6 +97,9 @@ namespace PlaylistCreator
 		private static HashSet<string> goodSongsJpop = new HashSet<string>() {
 			"asu e no tobira",
 			"Everything (It's you)",
+			"fly",
+			"fukai mori",
+			"grateful days",
 			"hana",
 			"kuchibue",
 			"kurumi",
