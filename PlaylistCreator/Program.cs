@@ -118,11 +118,14 @@ namespace PlaylistCreator
 			StartProgram(args);
 
 			CheckFolders();
-			if (doEnglish)
+			if (doEnglish) {
 				DoEnglish();
-			Process.Start("explorer.exe", @"C:\Music\");
-			if (doJpop)
+				Process.Start("explorer.exe", @"C:\Music\");
+			}
+
+			if (doJpop) {
 				DoJpop();
+			}
 
 			EndProgram();
 		}
@@ -155,10 +158,10 @@ namespace PlaylistCreator
 			GetAllSongsJpop();
 			CreateGoodListJpop();
 			CreatePlaylistJpop();
-			WritePlaylistM3U(jpopFallWinter, "J-Pop Fall Winter");
-			WritePlaylistITunes(jpopFallWinter, "J-Pop Fall Winter");
-			WritePlaylistM3U(jpopSpringSummer, "J-Pop Spring Summer");
-			WritePlaylistITunes(jpopSpringSummer, "J-Pop Spring Summer");
+			WritePlaylistM3U(playlistJpopFallWinter, "J-Pop Fall Winter");
+			WritePlaylistITunes(playlistJpopFallWinter, "J-Pop Fall Winter");
+			//WritePlaylistM3U(playlistJpopFallWinter, "J-Pop Spring Summer");
+			//WritePlaylistITunes(playlistJpopFallWinter, "J-Pop Spring Summer");
 			//WriteHtmlFile(playlist, "All");
 		}
 
@@ -168,56 +171,88 @@ namespace PlaylistCreator
 			string[] exclusions;
 			var folder = @"C:\Music\00 Genres\J-Pop\";
 
-			exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
-			files = FileUtil.GetAllAudioFiles(folder, exclusions);
-			for (int i = 0; i < files.Count; i++)
-				jpopSpringSummer.Add(new SongFileInfo(files[i]));
+			//exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
+			//files = FileUtil.GetAllAudioFiles(folder, exclusions);
+			//for (int i = 0; i < files.Count; i++)
+			//	jpopSpringSummer.Add(new SongFileInfo(files[i]));
 
 			exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
 			files = FileUtil.GetAllAudioFiles(folder, exclusions);
 			for (int i = 0; i < files.Count; i++)
 				jpopFallWinter.Add(new SongFileInfo(files[i]));
+
+			//if (consoleOut) {
+			//	for (int i = 0; i < jpopFallWinter.Count; i++)
+			//		Console.Write("\n{0}) {1} - {2}", i + 1, jpopFallWinter[i].Artist, jpopFallWinter[i].Title);
+			//}
 		}
 
 		private static void CreateGoodListJpop()
 		{
-			goodListJpop = jpopSpringSummer.Where(x => goodSongsJpop.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-			jpopSpringSummer = jpopSpringSummer.Except(goodListJpop).ToList();
+			goodListJpop = jpopFallWinter.Where(x => goodSongsJpop.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 			jpopFallWinter = jpopFallWinter.Except(goodListJpop).ToList();
+
+			if (consoleOut) {
+				for (int i = 0; i < goodListJpop.Count; i++)
+					Console.Write("\n{0}) {1} - {2}", i + 1, goodListJpop[i].Artist, goodListJpop[i].Title);
+			}
 		}
 
 		private static void CreatePlaylistJpop()
 		{
-			int goodInd;
-			var goodListJpopCount = goodListJpop.Count;
+			try {
+				int goodInd;
+				//Console.Write("\nvar goodListJpopCount = goodListJpop.Count");
+				var goodListJpopCount = goodListJpop.Count;
+				Console.Write("\ngoodListJpopCount: {0}", goodListJpopCount);
 
-			jpopFallWinter = jpopFallWinter.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-			goodInd = 0;
+				//Console.Write("\njpopFallWinter = jpopFallWinter.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList");
+				jpopFallWinter = jpopFallWinter.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+				//Console.Write("\ngoodInd = 0");
+				goodInd = 0;
 
-			for (int i = 0; i < jpopFallWinter.Count - 2; i++) {
-				if (goodInd == goodListJpopCount)
-					goodInd = 0;
-				playlistJpopFallWinter.Add(goodListJpop[goodInd]);
-				goodInd++;
-				playlistJpopFallWinter.Add(jpopFallWinter[i]);
-				playlistJpopFallWinter.Add(jpopFallWinter[i + 1]);
-				playlistJpopFallWinter.Add(jpopFallWinter[i + 2]);
-				i = i + 2;
+				for (int i = 0; i < jpopFallWinter.Count; i+=3) {
+					//Console.Write("\nif (goodInd == goodListJpopCount)");
+					if (goodInd == goodListJpopCount)
+						goodInd = 0;
+					//Console.Write("\nplaylistJpopFallWinter.Add(goodListJpop[goodInd");
+					playlistJpopFallWinter.Add(goodListJpop[goodInd]);
+					//Console.Write("\ngoodInd++;");
+					goodInd++;
+					//Console.Write("\nplaylistJpopFallWinter.Add(jpopFallWinter[i]);");
+					playlistJpopFallWinter.Add(jpopFallWinter[i]);
+					//Console.Write("\nplaylistJpopFallWinter.Add(jpopFallWinter[i + 1]);");
+					try {
+						playlistJpopFallWinter.Add(jpopFallWinter[i + 1]);
+					}
+					catch (Exception) { }
+					try {
+						playlistJpopFallWinter.Add(jpopFallWinter[i + 2]);
+					}
+					catch (Exception) { }
+				}
+
+				//jpopSpringSummer = jpopSpringSummer.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+				//goodInd = 0;
+
+				//for (int i = 0; i < jpopSpringSummer.Count - 2; i++) {
+				//	if (goodInd == goodListJpopCount)
+				//		goodInd = 0;
+				//	playlistJpopSpringSummer.Add(goodListJpop[goodInd]);
+				//	goodInd++;
+				//	playlistJpopSpringSummer.Add(jpopSpringSummer[i]);
+				//	playlistJpopSpringSummer.Add(jpopSpringSummer[i + 1]);
+				//	playlistJpopSpringSummer.Add(jpopSpringSummer[i + 2]);
+				//	i = i + 2;
+				//}
 			}
 
-			//jpopSpringSummer = jpopSpringSummer.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-			//goodInd = 0;
+			catch (Exception ex) {
+				if (ex.InnerException == null)
+					throw new Exception(String.Format("{0}{2}{2}Exception thrown in PlaylistCreator.CreatePlaylistJpop().{2}{1}", ex.Message, ex.ToString(), Environment.NewLine));
 
-			//for (int i = 0; i < jpopSpringSummer.Count - 2; i++) {
-			//	if (goodInd == goodListJpopCount)
-			//		goodInd = 0;
-			//	playlistJpopSpringSummer.Add(goodListJpop[goodInd]);
-			//	goodInd++;
-			//	playlistJpopSpringSummer.Add(jpopSpringSummer[i]);
-			//	playlistJpopSpringSummer.Add(jpopSpringSummer[i + 1]);
-			//	playlistJpopSpringSummer.Add(jpopSpringSummer[i + 2]);
-			//	i = i + 2;
-			//}
+				throw new Exception(String.Format("{0}{2}{2}Exception thrown in INNER EXCEPTION of PlaylistCreator.CreatePlaylistJpop().{2}{1}", ex.InnerException.Message, ex.InnerException.ToString(), Environment.NewLine));
+			}
 		}
 		#endregion J-Pop
 
