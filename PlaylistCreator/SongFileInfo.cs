@@ -171,6 +171,14 @@ namespace PlaylistCreator
 			}
 		}
 
+		public bool Like(SongFileInfo other)
+		{
+			if (other == null || other.Artist == null || other.Title == null)
+				return false;
+
+			return ((this.Artist.StartsWith(other.Artist) || other.Artist.StartsWith(this.Artist)) && (this.Title.StartsWith(other.Title) || other.Title.StartsWith(this.Title)));
+		}
+
 		public void ConsoleOut()
 		{
 			Console.Write("\n");
