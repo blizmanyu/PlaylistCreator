@@ -106,6 +106,8 @@ namespace PlaylistCreator
 			"mirai",
 			"namonaki uta",
 			"owarinaki tabi",
+			"Sekai ga Owaru Madewa",
+			"Sekaijuu no Dare Yori Kitto",
 			"te no hira",
 			"yasashii uta",
 			"youthful days",
