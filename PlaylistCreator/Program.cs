@@ -22,6 +22,7 @@ namespace PlaylistCreator
 
 		#region Fields
 		const string EN_US = @"M/d/yyyy h:mmtt";
+		private static FileUtil _fileUtil = new FileUtil();
 		private static List<SongFileInfo> playlist = new List<SongFileInfo>();
 		private static List<SongFileInfo> allSongs = new List<SongFileInfo>();
 		private static List<SongFileInfo> goodList = new List<SongFileInfo>();
@@ -95,22 +96,38 @@ namespace PlaylistCreator
 		private static List<SongFileInfo> jpopSpringSummer = new List<SongFileInfo>();
 		private static HashSet<string> folderExclusionsJpop = new HashSet<string>() { @"\_Album", @"_Christmas", @"_FallWinter", @"_SpringSummer" };
 		private static HashSet<string> goodSongsJpop = new HashSet<string>() {
-			"asu e no tobira",
-			"Everything (It's you)",
-			"fly",
-			"fukai mori",
-			"grateful days",
-			"hana",
-			"kuchibue",
-			"kurumi",
-			"mirai",
-			"namonaki uta",
-			"owarinaki tabi",
-			"Sekai ga Owaru Madewa",
-			"Sekaijuu no Dare Yori Kitto",
-			"te no hira",
-			"yasashii uta",
-			"youthful days",
+			"Floatin'", // Chemistry //
+			"It Takes Two", // Chemistry //
+			"Pieces of a Dream", // Chemistry //
+			"Point of No Return", // Chemistry //
+			"fukai mori", // Do As Infinity //
+			"Oasis", // Do As Infinity //
+			"Under the Moon", // Do As Infinity //
+			"Yesterday & Today", // Do As Infinity //
+			"grateful days", // Dragon Ash //
+			"your eyes only", // Exile //
+			"Be With You", // Glay //
+			"Beloved", // Glay //
+			"However", // Glay //
+			"Kiseki no Hate", // Glay //
+			"Pure Soul", // Glay //
+			"Face", // Globe //
+			"Faces Places", // Globe //
+			"Perfume of Love", // Globe //
+			"asu e no tobira", // I WiSH //
+			"Everything (It's you)", // Mr.Children //
+			"hana", // Mr.Children //
+			"kuchibue", // Mr.Children //
+			"kurumi", // Mr.Children //
+			"mirai", // Mr.Children //
+			"namonaki uta", // Mr.Children //
+			"owarinaki tabi", // Mr.Children //
+			"te no hira", // Mr.Children //
+			"yasashii uta", // Mr.Children //
+			"youthful days", // Mr.Children //
+			"fly", // Smap //
+			"Sekai ga Owaru Madewa", // Wands //
+			"Sekaijuu no Dare Yori Kitto", // Wands //
 		};
 		#endregion J-Pop
 		#endregion Fields
@@ -179,7 +196,7 @@ namespace PlaylistCreator
 			//	jpopSpringSummer.Add(new SongFileInfo(files[i]));
 
 			exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
-			files = FileUtil.GetAllAudioFiles(folder, exclusions);
+			files = _fileUtil.GetAllAudioFiles(folder, exclusions);
 			for (int i = 0; i < files.Count; i++)
 				jpopFallWinter.Add(new SongFileInfo(files[i]));
 
@@ -270,7 +287,7 @@ namespace PlaylistCreator
 		private static void GetAllSongs()
 		{
 			//var srcFolder = @"C:\Music\"; // for testing only //
-			var files = FileUtil.GetAllAudioFiles(srcFolder, folderExclusions.ToArray());
+			var files = _fileUtil.GetAllAudioFiles(srcFolder, folderExclusions.ToArray());
 			for (int i = 0; i < files.Count; i++)
 				allSongs.Add(new SongFileInfo(files[i]));
 		}
