@@ -17,7 +17,9 @@ namespace PlaylistCreator
 		private static bool consoleOut = true; // default = false
 		private static bool doEnglish = false;
 		private static bool doJpop = true;
-		private static DateTime newSongThreshold = DateTime.Now.AddYears(-1);
+		private static bool doJpopSpringSummer = true;
+		private static bool doJpopFallWinter = false;
+		private static DateTime newSongThreshold = DateTime.Now.AddYears(-2);
 		private static HashSet<string> supportedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mp3", ".m4a", ".wma" };
 
 		#region Fields
@@ -177,8 +179,8 @@ namespace PlaylistCreator
 			GetAllSongsJpop();
 			CreateGoodListJpop();
 			CreatePlaylistJpop();
-			WritePlaylistM3U(playlistJpopFallWinter, "J-Pop Fall Winter");
-			WritePlaylistITunes(playlistJpopFallWinter, "J-Pop Fall Winter");
+			//WritePlaylistM3U(playlistJpopFallWinter, "J-Pop Fall Winter");
+			//WritePlaylistITunes(playlistJpopFallWinter, "J-Pop Fall Winter");
 			WritePlaylistM3U(playlistJpopSpringSummer, "J-Pop Spring Summer");
 			WritePlaylistITunes(playlistJpopSpringSummer, "J-Pop Spring Summer");
 			//WriteHtmlFile(playlist, "All");
