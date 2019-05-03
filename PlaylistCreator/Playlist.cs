@@ -11,14 +11,32 @@ namespace PlaylistCreator
 		public enum PType { English, JPopSpringSummer, JPopFallWinter };
 		public PType Type;
 		public string Name;
+		public List<SongFileInfo> GoodEnglishSongs = new List<SongFileInfo> {
+			new SongFileInfo("artist", "title"),
+		};
+		public List<SongFileInfo> GoodJPopSpringSummerSongs = new List<SongFileInfo> {
+			new SongFileInfo("artist", "title"),
+		};
+		public List<SongFileInfo> GoodJPopFallWinterSongs = new List<SongFileInfo> {
+			new SongFileInfo("artist", "title"),
+		};
 
-		public Playlist(PType type, string name=null)
+		protected List<SongFileInfo> AllSongs = new List<SongFileInfo>();
+		protected List<SongFileInfo> GoodList = new List<SongFileInfo>();
+		protected List<SongFileInfo> NewList = new List<SongFileInfo>();
+		protected List<SongFileInfo> NewPlusGoodList = new List<SongFileInfo>();
+		protected List<SongFileInfo> ThePlaylist = new List<SongFileInfo>();
+
+		public Playlist(PType type, string name=null, bool createPlaylistNow=false)
 		{
 			if (String.IsNullOrWhiteSpace(name))
 				name = type.ToString();
 
 			Type = type;
 			Name = name;
+
+			if (createPlaylistNow)
+				Create();
 		}
 
 		public void Create()
@@ -28,15 +46,13 @@ namespace PlaylistCreator
 				case PType.JPopSpringSummer:
 					// Step 1: Get all songs //
 
-					// Step 2: Create "New" list //
+					// Step 2: Create GoodList //
 
-					// Step 3: Create "Good" list //
+					// Step 3: Create NewList //
 
-					// Step 4: Create New + Good list //
+					// Step 4: Create NewPlusGoodList //
 
-					// Step 5: Create playlist //
-
-					// Step 6: Write playlist //
+					// Step 5: Create ThePlaylist //
 
 					break;
 				#endregion JPopSpringSummer
