@@ -22,6 +22,17 @@ namespace PlaylistCreator
 		public string AlbumArtist { get; set; }
 		public string Composer { get; set; }
 
+		public SongFileInfo(string artist, string title)
+		{
+			if (String.IsNullOrWhiteSpace(artist))
+				throw new Exception("<artist> is required. Exception thrown in SongFileInfo.SongFileInfo(string artist, string title).");
+			if (String.IsNullOrWhiteSpace(title))
+				throw new Exception("<title> is required. Exception thrown in SongFileInfo.SongFileInfo(string artist, string title).");
+
+			Artist = artist;
+			Title = title;
+		}
+
 		public SongFileInfo(FileInfo fInfo)
 		{
 			if (fInfo == null || String.IsNullOrEmpty(fInfo.FullName))
