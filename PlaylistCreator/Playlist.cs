@@ -22,7 +22,7 @@ namespace PlaylistCreator
 		#endregion GoodSongsJPopFallWinter
 		#region public HashSet<string> GoodSongsJPopSpringSummer
 		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string>() {
-			// SpringSummer only //
+			// Spring/Summer only //
 			"Natsu Iro", // Yuzu //
 			// the rest //
 			"Floatin'", // Chemistry //
