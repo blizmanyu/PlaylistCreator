@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Yutaka.IO;
 
 namespace PlaylistCreator
@@ -54,7 +52,6 @@ namespace PlaylistCreator
 		};
 		public DateTime NewSongThreshold;
 		public string SourceFolder; // where the music files are //
-		public string DestinationFolder; // where you want the playlist to go //
 
 		private FileUtil _fileUtil;
 		private List<string> IgnoreListFolders;
@@ -78,7 +75,6 @@ namespace PlaylistCreator
 			Name = name;
 			NewSongThreshold = DateTime.Now.AddYears(-2);
 			SourceFolder = @"C:\Music\00 Genres\";
-			DestinationFolder = @"C:\Music\01 Playlists\";
 			_fileUtil = new FileUtil();
 
 			if (createPlaylistNow)
@@ -155,9 +151,18 @@ namespace PlaylistCreator
 
 		}
 
-		public void WriteForWinamp()
+		public void WriteForWinamp(string destFolder)
 		{
+			var dest = String.Format("{0}{1}{2:yyyy MMdd HHmm ssff}.m3u", destFolder, Name, DateTime.Now);
+			var content = "#EXTM3U";
 
+			foreach (var song in ThePlaylist) {
+				content += String.Format("\n#EXTINF:{0},{1} - {2}", song.Duration, song.Artist, song.Title);
+				content += String.Format("\n{0}", song.Path);
+			}
+
+			content += "\n";
+			_fileUtil.Write(content, dest);
 		}
 	}
 }
