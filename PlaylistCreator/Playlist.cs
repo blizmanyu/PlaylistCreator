@@ -23,7 +23,7 @@ namespace PlaylistCreator
 		#region public HashSet<string> GoodSongsJPopSpringSummer
 		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string>() {
 			// SpringSummer only //
-			"Natsu Iro'", // Yuzu //
+			"Natsu Iro", // Yuzu //
 			// the rest //
 			"Floatin'", // Chemistry //
 			"It Takes Two", // Chemistry //
