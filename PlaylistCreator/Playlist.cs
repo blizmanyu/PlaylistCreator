@@ -10,12 +10,17 @@ namespace PlaylistCreator
 		public enum PType { English, JPopSpringSummer, JPopFallWinter };
 		public PType Type;
 		public string Name;
+		#region public HashSet<string> GoodSongsEnglish
 		public HashSet<string> GoodSongsEnglish = new HashSet<string> {
 			"asdfasdf",
 		};
+		#endregion GoodSongsEnglish
+		#region public HashSet<string> GoodSongsJPopFallWinter
 		public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string> {
 			"asdfasdf",
 		};
+		#endregion GoodSongsJPopFallWinter
+		#region public HashSet<string> GoodSongsJPopSpringSummer
 		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string>() {
 			"Floatin'", // Chemistry //
 			"It Takes Two", // Chemistry //
@@ -50,6 +55,7 @@ namespace PlaylistCreator
 			"Sekai ga Owaru Madewa", // Wands //
 			"Sekaijuu no Dare Yori Kitto", // Wands //
 		};
+		#endregion GoodSongsJPopSpringSummer
 		public DateTime NewSongThreshold;
 		public string SourceFolder; // where the music files are //
 
@@ -66,6 +72,7 @@ namespace PlaylistCreator
 		private int NewPlusGoodListCount = 0;
 		private int ThePlaylistCount = 0;
 
+		#region Constructor
 		public Playlist(PType type, string name=null, bool createPlaylistNow=false)
 		{
 			if (String.IsNullOrWhiteSpace(name))
@@ -80,6 +87,7 @@ namespace PlaylistCreator
 			if (createPlaylistNow)
 				Create();
 		}
+		#endregion Constructor
 
 		public void Create()
 		{
@@ -146,9 +154,16 @@ namespace PlaylistCreator
 
 		}
 
-		public void WriteForITunes()
+		public void WriteForITunes(string destFolder)
 		{
+			var dest = String.Format("{0}{1}{2:yyyy MMdd HHmm ssff}.m3u", destFolder, Name, DateTime.Now);
+			var content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 
+			foreach (var song in ThePlaylist)
+				content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
+
+			content += "\n";
+			_fileUtil.Write(content, dest);
 		}
 
 		public void WriteForWinamp(string destFolder)
