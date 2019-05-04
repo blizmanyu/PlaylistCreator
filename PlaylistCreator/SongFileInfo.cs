@@ -122,33 +122,33 @@ namespace PlaylistCreator
 			if (lastWriteTime == null || lastWriteTime < DATE_THRESHOLD)
 				throw new Exception(String.Format("Can't determine LastWriteTime of {0}", Path));
 
-			if (creationTime < lastWriteTime) {
-				Date = creationTime;
-				if ((lastWriteTime - creationTime).TotalDays > 1) {
-					Console.Write("\n");
-					Console.Write("\n{0}", Path);
-					Console.Write("\nlastWriteTime - creationTime > 1");
-					Console.Write("\n CreationTime: {0}", creationTime);
-					Console.Write("\nLastWriteTime: {0}", lastWriteTime);
-					Console.Write("\n{0} days", (lastWriteTime - creationTime).TotalDays);
-					fInfo.LastWriteTime = Date;
-					fInfo.LastAccessTime = Date;
-				}
-			}
+			//if (creationTime < lastWriteTime) {
+			//	Date = creationTime;
+			//	if ((lastWriteTime - creationTime).TotalDays > 1) {
+			//		Console.Write("\n");
+			//		Console.Write("\n{0}", Path);
+			//		Console.Write("\nlastWriteTime - creationTime > 1");
+			//		Console.Write("\n CreationTime: {0}", creationTime);
+			//		Console.Write("\nLastWriteTime: {0}", lastWriteTime);
+			//		Console.Write("\n{0} days", (lastWriteTime - creationTime).TotalDays);
+			//		fInfo.LastWriteTime = Date;
+			//		fInfo.LastAccessTime = Date;
+			//	}
+			//}
 
-			else /*lastWriteTime <= creationTime */ {
-				Date = lastWriteTime;
-				if ((creationTime - lastWriteTime).TotalDays > 1) {
-					Console.Write("\n");
-					Console.Write("\n{0}", Path);
-					Console.Write("\ncreationTime - lastWriteTime > 1");
-					Console.Write("\n CreationTime: {0}", creationTime);
-					Console.Write("\nLastWriteTime: {0}", lastWriteTime);
-					Console.Write("\n{0} days", (creationTime - lastWriteTime).TotalDays);
-					fInfo.CreationTime = Date;
-					fInfo.LastAccessTime = Date;
-				}
-			}
+			//else /*lastWriteTime <= creationTime */ {
+			//	Date = lastWriteTime;
+			//	if ((creationTime - lastWriteTime).TotalDays > 1) {
+			//		Console.Write("\n");
+			//		Console.Write("\n{0}", Path);
+			//		Console.Write("\ncreationTime - lastWriteTime > 1");
+			//		Console.Write("\n CreationTime: {0}", creationTime);
+			//		Console.Write("\nLastWriteTime: {0}", lastWriteTime);
+			//		Console.Write("\n{0} days", (creationTime - lastWriteTime).TotalDays);
+			//		fInfo.CreationTime = Date;
+			//		fInfo.LastAccessTime = Date;
+			//	}
+			//}
 
 			try {
 				var file = TagLib.File.Create(Path);

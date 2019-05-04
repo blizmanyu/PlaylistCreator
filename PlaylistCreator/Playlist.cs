@@ -12,26 +12,62 @@ namespace PlaylistCreator
 		public enum PType { English, JPopSpringSummer, JPopFallWinter };
 		public PType Type;
 		public string Name;
-		public List<SongFileInfo> GoodEnglishSongs = new List<SongFileInfo> {
-			new SongFileInfo("artist", "title"),
+		public HashSet<string> GoodSongsEnglish = new HashSet<string> {
+			"asdfasdf",
 		};
-		public List<SongFileInfo> GoodJPopSpringSummerSongs = new List<SongFileInfo> {
-			new SongFileInfo("artist", "title"),
+		public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string> {
+			"asdfasdf",
 		};
-		public List<SongFileInfo> GoodJPopFallWinterSongs = new List<SongFileInfo> {
-			new SongFileInfo("artist", "title"),
+		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string>() {
+			"Floatin'", // Chemistry //
+			"It Takes Two", // Chemistry //
+			"Pieces of a Dream", // Chemistry //
+			"Point of No Return", // Chemistry //
+			"fukai mori", // Do As Infinity //
+			"Oasis", // Do As Infinity //
+			"Under the Moon", // Do As Infinity //
+			"Yesterday & Today", // Do As Infinity //
+			"grateful days", // Dragon Ash //
+			"your eyes only", // Exile //
+			"Be With You", // Glay //
+			"Beloved", // Glay //
+			"However", // Glay //
+			"Kiseki no Hate", // Glay //
+			"Pure Soul", // Glay //
+			"Face", // Globe //
+			"Faces Places", // Globe //
+			"Perfume of Love", // Globe //
+			"asu e no tobira", // I WiSH //
+			"Everything (It's you)", // Mr.Children //
+			"hana", // Mr.Children //
+			"kuchibue", // Mr.Children //
+			"kurumi", // Mr.Children //
+			"mirai", // Mr.Children //
+			"namonaki uta", // Mr.Children //
+			"owarinaki tabi", // Mr.Children //
+			"te no hira", // Mr.Children //
+			"yasashii uta", // Mr.Children //
+			"youthful days", // Mr.Children //
+			"fly", // Smap //
+			"Sekai ga Owaru Madewa", // Wands //
+			"Sekaijuu no Dare Yori Kitto", // Wands //
 		};
 		public DateTime NewSongThreshold;
 		public string SourceFolder; // where the music files are //
 		public string DestinationFolder; // where you want the playlist to go //
 
-		protected FileUtil _fileUtil;
-		protected HashSet<string> FolderExclusions;
-		protected List<SongFileInfo> AllSongs = new List<SongFileInfo>();
-		protected List<SongFileInfo> GoodList = new List<SongFileInfo>();
-		protected List<SongFileInfo> NewList = new List<SongFileInfo>();
-		protected List<SongFileInfo> NewPlusGoodList = new List<SongFileInfo>();
-		protected List<SongFileInfo> ThePlaylist = new List<SongFileInfo>();
+		private FileUtil _fileUtil;
+		private List<string> IgnoreListFolders;
+		private List<SongFileInfo> AllSongs = new List<SongFileInfo>();
+		private List<SongFileInfo> GoodList = new List<SongFileInfo>();
+		private List<SongFileInfo> NewList = new List<SongFileInfo>();
+		private List<SongFileInfo> NewPlusGoodList = new List<SongFileInfo>();
+		private List<SongFileInfo> ThePlaylist = new List<SongFileInfo>();
+		private int AllSongsCount = 0;
+		private int GoodListCount = 0;
+		private int NewListCount = 0;
+		private int NewPlusGoodListCount = 0;
+		private int ThePlaylistCount = 0;
 
 		public Playlist(PType type, string name=null, bool createPlaylistNow=false)
 		{
@@ -52,43 +88,56 @@ namespace PlaylistCreator
 		public void Create()
 		{
 			List<string> files;
+			int goodInd;
+			string folder;
+			string[] exclusions;
+
 			switch (Type) {
-				#region English
-				case PType.English:
-					FolderExclusions = new HashSet<string>() { @"\Album", @"\Classical", @"\J-Pop", @"\J-Rap", @"\Spanish", };
-
-					// Step 1: Get all songs //
-					files = _fileUtil.GetAllAudioFiles(SourceFolder, FolderExclusions.ToArray());
-					for (int i = 0; i < files.Count; i++)
-						AllSongs.Add(new SongFileInfo(files[i]));
-
-					// Step 2: Create GoodList //
-
-					// Step 3: Create NewList //
-
-					// Step 4: Create NewPlusGoodList //
-
-					// Step 5: Create ThePlaylist //
-
-					break;
-				#endregion English
 				#region JPopSpringSummer
 				case PType.JPopSpringSummer:
-					FolderExclusions = new HashSet<string>() { @"\Album", @"\Classical", @"\J-Pop", @"\J-Rap", @"\Spanish", };
+					folder = @"C:\Music\00 Genres\J-Pop\";
+					exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
 
 					// Step 1: Get all songs //
-					files = _fileUtil.GetAllAudioFiles(SourceFolder, FolderExclusions.ToArray());
+					files = _fileUtil.GetAllAudioFiles(folder, exclusions);
 					for (int i = 0; i < files.Count; i++)
 						AllSongs.Add(new SongFileInfo(files[i]));
 
+					AllSongsCount = AllSongs.Count;
+
 					// Step 2: Create GoodList //
+					GoodList = AllSongs.Where(x => GoodSongsJPopSpringSummer.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+					GoodListCount = GoodList.Count;
 
-					// Step 3: Create NewList //
-
-					// Step 4: Create NewPlusGoodList //
+					// Step 3: Create NewList // Ignored for J-Pop lists //
+					// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
 
 					// Step 5: Create ThePlaylist //
+					AllSongs = AllSongs.Except(GoodList).ToList();
+					AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+					goodInd = 0;
 
+					for (int i = 0; i < AllSongs.Count; i++) {
+						if (goodInd == GoodListCount)
+							goodInd = 0;
+
+						ThePlaylist.Add(GoodList[goodInd++]);
+						ThePlaylist.Add(AllSongs[i++]);
+
+						try {
+							ThePlaylist.Add(AllSongs[i++]);
+						}
+						catch (Exception) {
+							break;
+						}
+
+						try {
+							ThePlaylist.Add(AllSongs[i]);
+						}
+						catch (Exception) {
+							break;
+						}
+					}
 					break;
 				#endregion JPopSpringSummer
 				default:
