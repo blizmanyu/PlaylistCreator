@@ -22,6 +22,9 @@ namespace PlaylistCreator
 		#endregion GoodSongsJPopFallWinter
 		#region public HashSet<string> GoodSongsJPopSpringSummer
 		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string>() {
+			// SpringSummer only //
+			"Natsu Iro'", // Yuzu //
+			// the rest //
 			"Floatin'", // Chemistry //
 			"It Takes Two", // Chemistry //
 			"Pieces of a Dream", // Chemistry //
@@ -59,7 +62,6 @@ namespace PlaylistCreator
 		public DateTime NewSongThreshold;
 
 		private FileUtil _fileUtil;
-		private List<string> IgnoreListFolders;
 		private List<SongFileInfo> AllSongs = new List<SongFileInfo>();
 		private List<SongFileInfo> GoodList = new List<SongFileInfo>();
 		private List<SongFileInfo> NewList = new List<SongFileInfo>();
@@ -149,7 +151,7 @@ namespace PlaylistCreator
 
 		public void WriteForITunes(string destFolder)
 		{
-			var dest = String.Format("{0}{1}{2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
+			var dest = String.Format("{0}{1} {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
 			var content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 
 			foreach (var song in ThePlaylist)
@@ -161,7 +163,7 @@ namespace PlaylistCreator
 
 		public void WriteForWinamp(string destFolder)
 		{
-			var dest = String.Format("{0}{1}{2:yyyy MMdd HHmm ssff}.m3u", destFolder, Name, DateTime.Now);
+			var dest = String.Format("{0}{1} {2:yyyy MMdd HHmm ssff}.m3u", destFolder, Name, DateTime.Now);
 			var content = "#EXTM3U";
 
 			foreach (var song in ThePlaylist) {
