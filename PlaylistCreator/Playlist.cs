@@ -74,6 +74,8 @@ namespace PlaylistCreator
 				#endregion English
 				#region JPopSpringSummer
 				case PType.JPopSpringSummer:
+					FolderExclusions = new HashSet<string>() { @"\Album", @"\Classical", @"\J-Pop", @"\J-Rap", @"\Spanish", };
+
 					// Step 1: Get all songs //
 					files = _fileUtil.GetAllAudioFiles(SourceFolder, FolderExclusions.ToArray());
 					for (int i = 0; i < files.Count; i++)
