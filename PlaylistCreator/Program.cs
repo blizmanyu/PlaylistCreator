@@ -137,16 +137,37 @@ namespace PlaylistCreator
 		static void Main(string[] args)
 		{
 			StartProgram(args);
-
 			CheckFolders();
-			if (doEnglish) {
-				DoEnglish();
-				Process.Start("explorer.exe", @"C:\Music\");
+			var openFolder = true;
+
+			var destFolder = playlistFolder;
+			var playlist1 = new Playlist(Playlist.PType.JPopSpringSummer);
+			playlist1.Create(@"C:\Music\00 Genres\J-Pop\");
+			playlist1.WriteForWinamp(destFolder);
+			playlist1.WriteForITunes(destFolder);
+
+			if (openFolder) {
+				Process.Start("explorer.exe", destFolder);
+				openFolder = false;
 			}
 
-			if (doJpop) {
-				DoJpop();
-			}
+			//if (doJpop) {
+			//	DoJpop();
+
+			//	if (openFolder) {
+			//		Process.Start("explorer.exe", @"C:\Music\");
+			//		openFolder = false;
+			//	}
+			//}
+
+			//if (doEnglish) {
+			//	DoEnglish();
+
+			//	if (openFolder) {
+			//		Process.Start("explorer.exe", @"C:\Music\");
+			//		openFolder = false;
+			//	}
+			//}
 
 			EndProgram();
 		}

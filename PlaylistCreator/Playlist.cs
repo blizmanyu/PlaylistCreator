@@ -57,7 +57,6 @@ namespace PlaylistCreator
 		};
 		#endregion GoodSongsJPopSpringSummer
 		public DateTime NewSongThreshold;
-		public string SourceFolder; // where the music files are //
 
 		private FileUtil _fileUtil;
 		private List<string> IgnoreListFolders;
@@ -73,7 +72,7 @@ namespace PlaylistCreator
 		private int ThePlaylistCount = 0;
 
 		#region Constructor
-		public Playlist(PType type, string name=null, bool createPlaylistNow=false)
+		public Playlist(PType type, string name=null)
 		{
 			if (String.IsNullOrWhiteSpace(name))
 				name = type.ToString();
@@ -81,29 +80,23 @@ namespace PlaylistCreator
 			Type = type;
 			Name = name;
 			NewSongThreshold = DateTime.Now.AddYears(-2);
-			SourceFolder = @"C:\Music\00 Genres\";
 			_fileUtil = new FileUtil();
-
-			if (createPlaylistNow)
-				Create();
 		}
 		#endregion Constructor
 
-		public void Create()
+		public void Create(string musicFolder)
 		{
 			List<string> files;
 			int goodInd;
-			string folder;
 			string[] exclusions;
 
 			switch (Type) {
 				#region JPopSpringSummer
 				case PType.JPopSpringSummer:
-					folder = @"C:\Music\00 Genres\J-Pop\";
 					exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
 
 					// Step 1: Get all songs //
-					files = _fileUtil.GetAllAudioFiles(folder, exclusions);
+					files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
 					for (int i = 0; i < files.Count; i++)
 						AllSongs.Add(new SongFileInfo(files[i]));
 
@@ -156,7 +149,7 @@ namespace PlaylistCreator
 
 		public void WriteForITunes(string destFolder)
 		{
-			var dest = String.Format("{0}{1}{2:yyyy MMdd HHmm ssff}.m3u", destFolder, Name, DateTime.Now);
+			var dest = String.Format("{0}{1}{2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
 			var content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 
 			foreach (var song in ThePlaylist)
