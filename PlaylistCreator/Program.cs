@@ -139,12 +139,24 @@ namespace PlaylistCreator
 			StartProgram(args);
 			CheckFolders();
 			var openFolder = true;
-
 			var destFolder = playlistFolder;
+
+			// JPopSpringSummer //
 			var playlist1 = new Playlist(Playlist.PType.JPopSpringSummer);
 			playlist1.Create(@"C:\Music\00 Genres\J-Pop\");
 			playlist1.WriteForWinamp(destFolder);
 			playlist1.WriteForITunes(destFolder);
+
+			if (openFolder) {
+				Process.Start("explorer.exe", destFolder);
+				openFolder = false;
+			}
+
+			// JPopFallWinter //
+			var playlist2 = new Playlist(Playlist.PType.JPopFallWinter);
+			playlist2.Create(@"C:\Music\00 Genres\J-Pop\");
+			playlist2.WriteForWinamp(destFolder);
+			playlist2.WriteForITunes(destFolder);
 
 			if (openFolder) {
 				Process.Start("explorer.exe", destFolder);
