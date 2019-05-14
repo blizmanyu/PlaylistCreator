@@ -207,23 +207,35 @@ namespace PlaylistCreator
 
 		public void WriteForITunes(string destFolder)
 		{
-			var dest = String.Format("{0}{1} {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
-			var content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
+			if (String.IsNullOrWhiteSpace(destFolder))
+				throw new Exception(String.Format("<destFolder> is required.{0}Exception thrown in Playlist.WriteForITunes(string destFolder).{0}", Environment.NewLine));
 
-			foreach (var song in ThePlaylist)
-				content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
+			try {
+				var dest = String.Format("{0}{1} {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
+				var content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 
-			content += "\n";
-			_fileUtil.Write(content, dest);
+				foreach (var song in ThePlaylist)
+					content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
 
-			dest = String.Format("{0}{1} Good {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
-			content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
+				content += "\n";
+				_fileUtil.Write(content, dest);
 
-			foreach (var song in ThePlaylist)
-				content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
+				dest = String.Format("{0}{1} Good {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
+				content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 
-			content += "\n";
-			_fileUtil.Write(content, dest);
+				foreach (var song in ThePlaylist)
+					content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
+
+				content += "\n";
+				_fileUtil.Write(content, dest);
+			}
+
+			catch (Exception ex) {
+				if (ex.InnerException == null)
+					throw new Exception(String.Format("{0}{2}Exception thrown in Playlist.WriteForITunes(string destFolder='{3}').{0}{1}{0}{0}", ex.Message, ex.ToString(), Environment.NewLine, destFolder));
+
+				throw new Exception(String.Format("{0}{2}Exception thrown in INNER EXCEPTION of Playlist.WriteForITunes(string destFolder='{3}').{0}{1}{0}{0}", ex.InnerException.Message, ex.InnerException.ToString(), Environment.NewLine, destFolder));
+			}
 		}
 
 		public void WriteForWinamp(string destFolder)
