@@ -223,7 +223,7 @@ namespace PlaylistCreator
 				dest = String.Format("{0}{1} Good {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
 				content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 
-				foreach (var song in ThePlaylist)
+				foreach (var song in GoodList)
 					content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
 
 				content += "\n";
