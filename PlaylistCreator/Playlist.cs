@@ -13,14 +13,24 @@ namespace PlaylistCreator
 		public HashSet<string> GoodSongsEnglish = new HashSet<string> {
 			"asdfasdf",
 		};
-		public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string> {
-			"asdfasdf",
-		};
 		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string> {
 			"Natsu Iro", // Yuzu //
 		};
-		#region public HashSet<string> GoodSongsJPop = new HashSet<string>()
-		public HashSet<string> GoodSongsJPop = new HashSet<string>() {
+		#region public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string>
+		public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string> {
+			"a walk in the park", // Amuro Namie //
+			"lovers again", // Exile //
+			"winter, again", // Glay //
+			"departures", // Globe //
+			"wanderin' destiny", // Globe //
+			"appears", // Hamasaki Ayumi //
+			"snow drop", // L'Arc~en~Ciel //
+			"winter fall", // L'Arc~en~Ciel //
+			"konayuki", // Remioromen //
+		};
+		#endregion GoodSongsJPopFallWinter
+		#region public HashSet<string> GoodSongsJPop = new HashSet<string>
+		public HashSet<string> GoodSongsJPop = new HashSet<string> {
 			"Floatin'", // Chemistry //
 			"It Takes Two", // Chemistry //
 			"Pieces of a Dream", // Chemistry //
@@ -199,6 +209,15 @@ namespace PlaylistCreator
 		{
 			var dest = String.Format("{0}{1} {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
 			var content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
+
+			foreach (var song in ThePlaylist)
+				content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
+
+			content += "\n";
+			_fileUtil.Write(content, dest);
+
+			dest = String.Format("{0}{1} Good {2:yyyy MMdd HHmm ssff}.txt", destFolder, Name, DateTime.Now);
+			content = "Name\tArtist\tComposer\tAlbum\tGrouping\tGenre\tSize\tTime\tDisc Number\tDisc Count\tTrack Number\tTrack Count\tYear\tDate Modified\tDate Added\tBit Rate\tSample Rate\tVolume Adjustment\tKind\tEqualizer\tComments\tPlays\tLast Played\tSkips\tLast Skipped\tMy Rating\tLocation";
 
 			foreach (var song in ThePlaylist)
 				content += String.Format("\n{0}\t{1}\t\t{2}\t\t{3}\t\t{4}\t{5}\t1\t{6}\t\t{7}\t\t\t\t\t\t\t\t\t0\t\t\t\t\t{8}", song.Title, song.Artist, song.Album, song.Genre, song.Duration, song.DiscNum, song.TrackNum, song.Year, song.Path);
