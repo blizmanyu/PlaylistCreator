@@ -82,8 +82,22 @@ namespace PlaylistCreator
 		#region Constructor
 		public Playlist(PType type, string name=null)
 		{
-			if (String.IsNullOrWhiteSpace(name))
-				name = type.ToString();
+			if (String.IsNullOrWhiteSpace(name)) {
+				switch (Type) {
+					case PType.English:
+						name = "English";
+						break;
+					case PType.JPopFallWinter:
+						name = "J-Pop Fall/Winter";
+						break;
+					case PType.JPopSpringSummer:
+						name = "J-Pop Spring/Summer";
+						break;
+					default:
+						name = type.ToString();
+						break;
+				}
+			}
 
 			Type = type;
 			Name = name;
