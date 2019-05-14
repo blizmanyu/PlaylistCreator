@@ -7,7 +7,7 @@ namespace PlaylistCreator
 {
 	public class Playlist
 	{
-		public enum PType { English, JPopSpringSummer, JPopFallWinter };
+		public enum PType { English, JPopFallWinter, JPopSpringSummer };
 		public PType Type;
 		public string Name;
 		public HashSet<string> GoodSongsEnglish = new HashSet<string> {
@@ -113,6 +113,11 @@ namespace PlaylistCreator
 			string[] exclusions;
 
 			switch (Type) {
+				#region TODO: case PType.English
+				case PType.English:
+					throw new Exception("Not supported yet.");
+					break;
+				#endregion TODO: case PType.English
 				#region JPopFallWinter
 				case PType.JPopFallWinter:
 					exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
