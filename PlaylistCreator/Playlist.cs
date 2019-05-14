@@ -10,21 +10,17 @@ namespace PlaylistCreator
 		public enum PType { English, JPopSpringSummer, JPopFallWinter };
 		public PType Type;
 		public string Name;
-		#region public HashSet<string> GoodSongsEnglish
 		public HashSet<string> GoodSongsEnglish = new HashSet<string> {
 			"asdfasdf",
 		};
-		#endregion GoodSongsEnglish
-		#region public HashSet<string> GoodSongsJPopFallWinter
 		public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string> {
 			"asdfasdf",
 		};
-		#endregion GoodSongsJPopFallWinter
-		#region public HashSet<string> GoodSongsJPopSpringSummer
-		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string>() {
-			// Spring/Summer only //
+		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string> {
 			"Natsu Iro", // Yuzu //
-			// the rest //
+		};
+		#region public HashSet<string> GoodSongsJPop = new HashSet<string>()
+		public HashSet<string> GoodSongsJPop = new HashSet<string>() {
 			"Floatin'", // Chemistry //
 			"It Takes Two", // Chemistry //
 			"Pieces of a Dream", // Chemistry //
@@ -58,7 +54,7 @@ namespace PlaylistCreator
 			"Sekai ga Owaru Madewa", // Wands //
 			"Sekaijuu no Dare Yori Kitto", // Wands //
 		};
-		#endregion GoodSongsJPopSpringSummer
+		#endregion GoodSongsJPop
 		public DateTime NewSongThreshold;
 
 		private FileUtil _fileUtil;
@@ -93,6 +89,54 @@ namespace PlaylistCreator
 			string[] exclusions;
 
 			switch (Type) {
+				#region JPopFallWinter
+				case PType.JPopFallWinter:
+					exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
+
+					// Step 1: Get all songs //
+					files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
+					for (int i = 0; i < files.Count; i++)
+						AllSongs.Add(new SongFileInfo(files[i]));
+
+					AllSongsCount = AllSongs.Count;
+
+					// Step 2: Create GoodList //
+					GoodSongsJPopFallWinter.UnionWith(GoodSongsJPop);
+					GoodList = AllSongs.Where(x => GoodSongsJPopFallWinter.Contains(x.Title, StringComparer.OrdinalIgnoreCase))
+						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+					GoodListCount = GoodList.Count;
+
+					// Step 3: Create NewList // Ignored for J-Pop lists //
+					// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
+
+					// Step 5: Create ThePlaylist //
+					AllSongs = AllSongs.Except(GoodList).ToList();
+					AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+					goodInd = 0;
+
+					for (int i = 0; i < AllSongs.Count; i++) {
+						if (goodInd == GoodListCount)
+							goodInd = 0;
+
+						ThePlaylist.Add(GoodList[goodInd++]);
+						ThePlaylist.Add(AllSongs[i++]);
+
+						try {
+							ThePlaylist.Add(AllSongs[i++]);
+						}
+						catch (Exception) {
+							break;
+						}
+
+						try {
+							ThePlaylist.Add(AllSongs[i]);
+						}
+						catch (Exception) {
+							break;
+						}
+					}
+					break;
+				#endregion JPopFallWinter
 				#region JPopSpringSummer
 				case PType.JPopSpringSummer:
 					exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
@@ -105,7 +149,9 @@ namespace PlaylistCreator
 					AllSongsCount = AllSongs.Count;
 
 					// Step 2: Create GoodList //
-					GoodList = AllSongs.Where(x => GoodSongsJPopSpringSummer.Contains(x.Title, StringComparer.OrdinalIgnoreCase)).OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+					GoodSongsJPopSpringSummer.UnionWith(GoodSongsJPop);
+					GoodList = AllSongs.Where(x => GoodSongsJPopSpringSummer.Contains(x.Title, StringComparer.OrdinalIgnoreCase))
+						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 					GoodListCount = GoodList.Count;
 
 					// Step 3: Create NewList // Ignored for J-Pop lists //
