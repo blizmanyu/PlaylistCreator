@@ -7,6 +7,7 @@ namespace PlaylistCreator
 {
 	public class Playlist
 	{
+		#region Fields
 		public enum PType { English, JPopFallWinter, JPopSpringSummer };
 		public PType Type;
 		public string Name;
@@ -78,20 +79,20 @@ namespace PlaylistCreator
 		private int NewListCount = 0;
 		private int NewPlusGoodListCount = 0;
 		private int ThePlaylistCount = 0;
+		#endregion Fields
 
-		#region Constructor
 		public Playlist(PType type, string name=null)
 		{
 			if (String.IsNullOrWhiteSpace(name)) {
-				switch (Type) {
+				switch (type) {
 					case PType.English:
 						name = "English";
 						break;
 					case PType.JPopFallWinter:
-						name = "J-Pop Fall/Winter";
+						name = "J-Pop Fall-Winter";
 						break;
 					case PType.JPopSpringSummer:
-						name = "J-Pop Spring/Summer";
+						name = "J-Pop Spring-Summer";
 						break;
 					default:
 						name = type.ToString();
@@ -104,7 +105,6 @@ namespace PlaylistCreator
 			NewSongThreshold = DateTime.Now.AddYears(-2);
 			_fileUtil = new FileUtil();
 		}
-		#endregion Constructor
 
 		public void Create(string musicFolder)
 		{
