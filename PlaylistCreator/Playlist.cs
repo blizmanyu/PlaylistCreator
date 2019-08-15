@@ -32,6 +32,7 @@ namespace PlaylistCreator
 		#endregion GoodSongsJPopFallWinter
 		#region public HashSet<string> GoodSongsJPop = new HashSet<string>
 		public HashSet<string> GoodSongsJPop = new HashSet<string> {
+			"There Will Be Love There", // Brilliant Green //
 			"Floatin'", // Chemistry //
 			"It Takes Two", // Chemistry //
 			"Pieces of a Dream", // Chemistry //
