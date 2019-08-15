@@ -37,7 +37,7 @@ namespace PlaylistCreator
 			"All Of Me",
 			"Blank Space",
 			"Breakeven",
-			"Clarity",
+			"Clarity [ft Foxes]",
 			"Different",
 			"Everybody Knows",
 			"Feels Like Home",
