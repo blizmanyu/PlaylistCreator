@@ -226,7 +226,8 @@ namespace PlaylistCreator
 			var otherArtist = other.Artist.ToUpper();
 			var otherTitle = other.Title.ToUpper();
 
-			return ((thisArtist.StartsWith(otherArtist) || otherArtist.StartsWith(thisArtist)) && (thisTitle.StartsWith(otherTitle) || otherTitle.StartsWith(thisTitle)));
+			return otherArtist.StartsWith(thisArtist) && otherTitle.StartsWith(thisTitle);
+			//return ((thisArtist.StartsWith(otherArtist) || otherArtist.StartsWith(thisArtist)) && (thisTitle.StartsWith(otherTitle) || otherTitle.StartsWith(thisTitle)));
 		}
 
 		public override int GetHashCode()
