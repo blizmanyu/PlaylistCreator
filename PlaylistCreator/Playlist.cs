@@ -58,58 +58,63 @@ namespace PlaylistCreator
 			new SongFileInfo("U2", "With Or Without You"),
 			new SongFileInfo("Zedd", "Clarity"),
 		};
-		#endregion public List<SongFileInfo> GoodEnglishSongs
-		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string> {
-			"Natsu Iro", // Yuzu //
+		#endregion GoodEnglishSongs
+		#region public List<SongFileInfo> GoodSongsJPopSpringSummer = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodSongsJPopSpringSummer = new List<SongFileInfo> {
+			new SongFileInfo("Yuzu", "Natsu Iro"),
 		};
-		#region public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string>
-		public HashSet<string> GoodSongsJPopFallWinter = new HashSet<string> {
-			"a walk in the park", // Amuro Namie //
-			"lovers again", // Exile //
-			"winter, again", // Glay //
-			"departures", // Globe //
-			"wanderin' destiny", // Globe //
-			"appears", // Hamasaki Ayumi //
-			"snow drop", // L'Arc~en~Ciel //
-			"winter fall", // L'Arc~en~Ciel //
-			"konayuki", // Remioromen //
+		#endregion GoodSongsJPopSpringSummer
+		#region public List<SongFileInfo> GoodSongsJPopFallWinter = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodSongsJPopFallWinter = new List<SongFileInfo> {
+			new SongFileInfo("Amuro Namie", "a walk in the park"),
+			new SongFileInfo("Exile", "lovers again"),
+			new SongFileInfo("Glay", "winter, again"),
+			new SongFileInfo("Globe", "departures"),
+			new SongFileInfo("Globe", "wanderin' destiny"),
+			new SongFileInfo("Hamasaki Ayumi", "appears"),
+			new SongFileInfo("L'Arc~en~Ciel", "snow drop"),
+			new SongFileInfo("L'Arc~en~Ciel", "winter fall"),
+			new SongFileInfo("Remioromen", "konayuki"),
 		};
 		#endregion GoodSongsJPopFallWinter
-		#region public HashSet<string> GoodSongsJPop = new HashSet<string>
-		public HashSet<string> GoodSongsJPop = new HashSet<string> {
-			"There Will Be Love There", // Brilliant Green //
-			"Floatin'", // Chemistry //
-			"It Takes Two", // Chemistry //
-			"Pieces of a Dream", // Chemistry //
-			"Point of No Return", // Chemistry //
-			"fukai mori", // Do As Infinity //
-			"Oasis", // Do As Infinity //
-			"Under the Moon", // Do As Infinity //
-			"Yesterday & Today", // Do As Infinity //
-			"grateful days", // Dragon Ash //
-			"your eyes only", // Exile //
-			"Be With You", // Glay //
-			"Beloved", // Glay //
-			"However", // Glay //
-			"Kiseki no Hate", // Glay //
-			"Pure Soul", // Glay //
-			"Face", // Globe //
-			"Faces Places", // Globe //
-			"Perfume of Love", // Globe //
-			"asu e no tobira", // I WiSH //
-			"Everything (It's you)", // Mr.Children //
-			"hana", // Mr.Children //
-			"kuchibue", // Mr.Children //
-			"kurumi", // Mr.Children //
-			"mirai", // Mr.Children //
-			"namonaki uta", // Mr.Children //
-			"owarinaki tabi", // Mr.Children //
-			"te no hira", // Mr.Children //
-			"yasashii uta", // Mr.Children //
-			"youthful days", // Mr.Children //
-			"fly", // Smap //
-			"Sekai ga Owaru Madewa", // Wands //
-			"Sekaijuu no Dare Yori Kitto", // Wands //
+		#region public List<SongFileInfo> GoodSongsJPop = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodSongsJPop = new List<SongFileInfo> {
+			new SongFileInfo("Amuro Namie", "Can You Celebrate"),
+			new SongFileInfo("Brilliant Green", "There Will Be Love There"),
+			new SongFileInfo("Chemistry", "Floatin'"),
+			new SongFileInfo("Chemistry", "It Takes Two"),
+			new SongFileInfo("Chemistry", "Pieces of a Dream"),
+			new SongFileInfo("Chemistry", "Point of No Return"),
+			new SongFileInfo("Do As Infinity", "fukai mori"),
+			new SongFileInfo("Do As Infinity", "Oasis"),
+			new SongFileInfo("Do As Infinity", "Under the Moon"),
+			new SongFileInfo("Do As Infinity", "Yesterday & Today"),
+			new SongFileInfo("Dragon Ash", "grateful days"),
+			new SongFileInfo("Exile", "your eyes only"),
+			new SongFileInfo("Glay", "Be With You"),
+			new SongFileInfo("Glay", "Beloved"),
+			new SongFileInfo("Glay", "However"),
+			new SongFileInfo("Glay", "Kiseki no Hate"),
+			new SongFileInfo("Glay", "Pure Soul"),
+			new SongFileInfo("Globe", "Face"),
+			new SongFileInfo("Globe", "Faces Places"),
+			new SongFileInfo("Globe", "Perfume of Love"),
+			new SongFileInfo("Hirai Ken", "Even If"),
+			new SongFileInfo("Hirai Ken", "Hitomi wo Tojite"),
+			new SongFileInfo("I WiSH", "asu e no tobira"),
+			new SongFileInfo("Mr.Children", "Everything (It's you)"),
+			new SongFileInfo("Mr.Children", "hana"),
+			new SongFileInfo("Mr.Children", "kuchibue"),
+			new SongFileInfo("Mr.Children", "kurumi"),
+			new SongFileInfo("Mr.Children", "mirai"),
+			new SongFileInfo("Mr.Children", "namonaki uta"),
+			new SongFileInfo("Mr.Children", "owarinaki tabi"),
+			new SongFileInfo("Mr.Children", "te no hira"),
+			new SongFileInfo("Mr.Children", "yasashii uta"),
+			new SongFileInfo("Mr.Children", "youthful days"),
+			new SongFileInfo("Smap", "fly"),
+			new SongFileInfo("Wands", "Sekai ga Owaru Madewa"),
+			new SongFileInfo("Wands", "Sekaijuu no Dare Yori Kitto"),
 		};
 		#endregion GoodSongsJPop
 		public DateTime NewSongThreshold;
@@ -218,8 +223,8 @@ namespace PlaylistCreator
 					AllSongsCount = AllSongs.Count;
 
 					// Step 2: Create GoodList //
-					GoodSongsJPopFallWinter.UnionWith(GoodSongsJPop);
-					GoodList = AllSongs.Where(x => GoodSongsJPopFallWinter.Contains(x.Title, StringComparer.OrdinalIgnoreCase))
+					GoodSongsJPopFallWinter.Union(GoodSongsJPop);
+					GoodList = AllSongs.Where(x => GoodSongsJPopFallWinter.Contains(x))
 						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 					GoodListCount = GoodList.Count;
 
@@ -266,8 +271,8 @@ namespace PlaylistCreator
 					AllSongsCount = AllSongs.Count;
 
 					// Step 2: Create GoodList //
-					GoodSongsJPopSpringSummer.UnionWith(GoodSongsJPop);
-					GoodList = AllSongs.Where(x => GoodSongsJPopSpringSummer.Contains(x.Title, StringComparer.OrdinalIgnoreCase))
+					GoodSongsJPopSpringSummer.Union(GoodSongsJPop);
+					GoodList = AllSongs.Where(x => GoodSongsJPopSpringSummer.Contains(x))
 						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 					GoodListCount = GoodList.Count;
 
