@@ -357,6 +357,17 @@ namespace PlaylistCreator
 
 			content += "\n";
 			_fileUtil.Write(content, dest);
+
+			dest = String.Format("{0}{1} Good {2:yyyy MMdd HHmm ssff}.m3u", destFolder, Name, DateTime.Now);
+			content = "#EXTM3U";
+
+			foreach (var song in GoodList) {
+				content += String.Format("\n#EXTINF:{0},{1} - {2}", song.Duration, song.Artist, song.Title);
+				content += String.Format("\n{0}", song.Path);
+			}
+
+			content += "\n";
+			_fileUtil.Write(content, dest);
 		}
 	}
 }
