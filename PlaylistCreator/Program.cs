@@ -14,7 +14,7 @@ namespace PlaylistCreator
 		// Config/Settings //
 		const string srcFolder = @"C:\Music\00 Genres\";
 		const string playlistFolder = @"C:\Music\01 Playlists\";
-		private static bool consoleOut = false; // default = false
+		private static bool consoleOut = true; // default = false
 		private static bool doEnglish = false;
 		private static bool doJpop = true;
 		private static bool doJpopSpringSummer = true;
