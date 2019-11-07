@@ -182,19 +182,6 @@ namespace PlaylistCreator
 			}
 		}
 
-		public bool Like(SongFileInfo other)
-		{
-			if (other == null || String.IsNullOrWhiteSpace(other.Artist) || String.IsNullOrWhiteSpace(other.Title))
-				return false;
-
-			var thisArtist = this.Artist.ToUpper();
-			var thisTitle = this.Title.ToUpper();
-			var otherArtist = other.Artist.ToUpper();
-			var otherTitle = other.Title.ToUpper();
-
-			return ((thisArtist.StartsWith(otherArtist) || otherArtist.StartsWith(thisArtist)) && (thisTitle.StartsWith(otherTitle) || otherTitle.StartsWith(thisTitle)));
-		}
-
 		public void ConsoleOut()
 		{
 			Console.Write("\n");
@@ -227,7 +214,6 @@ namespace PlaylistCreator
 			var otherTitle = other.Title.ToUpper();
 
 			return otherArtist.StartsWith(thisArtist) && otherTitle.StartsWith(thisTitle);
-			//return ((thisArtist.StartsWith(otherArtist) || otherArtist.StartsWith(thisArtist)) && (thisTitle.StartsWith(otherTitle) || otherTitle.StartsWith(thisTitle)));
 		}
 
 		public override int GetHashCode()
