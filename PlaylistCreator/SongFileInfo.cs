@@ -184,10 +184,15 @@ namespace PlaylistCreator
 
 		public bool Like(SongFileInfo other)
 		{
-			if (other == null || other.Artist == null || other.Title == null)
+			if (other == null || String.IsNullOrWhiteSpace(other.Artist) || String.IsNullOrWhiteSpace(other.Title))
 				return false;
 
-			return ((this.Artist.StartsWith(other.Artist) || other.Artist.StartsWith(this.Artist)) && (this.Title.StartsWith(other.Title) || other.Title.StartsWith(this.Title)));
+			var thisArtist = this.Artist.ToUpper();
+			var thisTitle = this.Title.ToUpper();
+			var otherArtist = other.Artist.ToUpper();
+			var otherTitle = other.Title.ToUpper();
+
+			return ((thisArtist.StartsWith(otherArtist) || otherArtist.StartsWith(thisArtist)) && (thisTitle.StartsWith(otherTitle) || otherTitle.StartsWith(thisTitle)));
 		}
 
 		public void ConsoleOut()
