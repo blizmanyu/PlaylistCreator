@@ -163,152 +163,165 @@ namespace PlaylistCreator
 			int goodInd;
 			string[] exclusions;
 
-			switch (Type) {
-				#region English
-				case PType.English:
-					exclusions = new string[] { @"\Album", @"\Classical", @"\J-Pop", @"\Spanish", };
+			try {
+				switch (Type) {
+					#region English
+					case PType.English:
+						exclusions = new string[] { @"\Album", @"\Classical", @"\J-Pop", @"\Spanish", };
 
-					// Step 1: Get all songs //
-					files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
-					for (int i = 0; i < files.Count; i++)
-						AllSongs.Add(new SongFileInfo(files[i]));
+						// Step 1: Get all songs //
+						files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
+						for (int i = 0; i < files.Count; i++)
+							AllSongs.Add(new SongFileInfo(files[i]));
 
-					AllSongsCount = AllSongs.Count;
+						AllSongsCount = AllSongs.Count;
 
-					// Step 2: Create GoodList //
-					GoodList = AllSongs.Where(x => GoodEnglishSongs.Contains(x))
-						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-					GoodListCount = GoodList.Count;
+						// Step 2: Create GoodList //
+						GoodList = AllSongs.Where(x => GoodEnglishSongs.Contains(x))
+							.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+						GoodListCount = GoodList.Count;
 
-					// Step 3: Create NewList // Ignored for J-Pop lists //
-					// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
+						// Step 3: Create NewList // Ignored for J-Pop lists //
+						// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
 
-					// Step 5: Create ThePlaylist //
-					AllSongs = AllSongs.Except(GoodList).ToList();
-					AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-					goodInd = 0;
+						// Step 5: Create ThePlaylist //
+						AllSongs = AllSongs.Except(GoodList).ToList();
+						AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+						goodInd = 0;
 
-					for (int i = 0; i < AllSongs.Count; i++) {
-						if (goodInd == GoodListCount)
-							goodInd = 0;
+						for (int i = 0; i < AllSongs.Count; i++) {
+							if (goodInd == GoodListCount)
+								goodInd = 0;
 
-						ThePlaylist.Add(GoodList[goodInd++]);
-						ThePlaylist.Add(AllSongs[i++]);
-
-						try {
+							ThePlaylist.Add(GoodList[goodInd++]);
 							ThePlaylist.Add(AllSongs[i++]);
+
+							try {
+								ThePlaylist.Add(AllSongs[i++]);
+							}
+							catch (Exception) {
+								break;
+							}
+
+							try {
+								ThePlaylist.Add(AllSongs[i]);
+							}
+							catch (Exception) {
+								break;
+							}
 						}
-						catch (Exception) {
-							break;
-						}
+						break;
+					#endregion English
+					#region JPopFallWinter
+					case PType.JPopFallWinter:
+						exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
 
-						try {
-							ThePlaylist.Add(AllSongs[i]);
-						}
-						catch (Exception) {
-							break;
-						}
-					}
-					break;
-				#endregion English
-				#region JPopFallWinter
-				case PType.JPopFallWinter:
-					exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
+						// Step 1: Get all songs //
+						files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
+						for (int i = 0; i < files.Count; i++)
+							AllSongs.Add(new SongFileInfo(files[i]));
 
-					// Step 1: Get all songs //
-					files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
-					for (int i = 0; i < files.Count; i++)
-						AllSongs.Add(new SongFileInfo(files[i]));
+						AllSongsCount = AllSongs.Count;
 
-					AllSongsCount = AllSongs.Count;
+						// Step 2: Create GoodList //
+						GoodJPopFallWinterSongs = GoodJPopFallWinterSongs.Union(GoodJPopSongs).ToList();
+						GoodList = AllSongs.Where(x => GoodJPopFallWinterSongs.Contains(x))
+							.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+						GoodListCount = GoodList.Count;
 
-					// Step 2: Create GoodList //
-					GoodJPopFallWinterSongs.Union(GoodJPopSongs);
-					GoodList = AllSongs.Where(x => GoodJPopFallWinterSongs.Contains(x))
-						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-					GoodListCount = GoodList.Count;
+						// Step 3: Create NewList // Ignored for J-Pop lists //
+						// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
 
-					// Step 3: Create NewList // Ignored for J-Pop lists //
-					// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
+						// Step 5: Create ThePlaylist //
+						AllSongs = AllSongs.Except(GoodList).ToList();
+						AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+						goodInd = 0;
 
-					// Step 5: Create ThePlaylist //
-					AllSongs = AllSongs.Except(GoodList).ToList();
-					AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-					goodInd = 0;
+						for (int i = 0; i < AllSongs.Count; i++) {
+							if (goodInd == GoodListCount)
+								goodInd = 0;
 
-					for (int i = 0; i < AllSongs.Count; i++) {
-						if (goodInd == GoodListCount)
-							goodInd = 0;
-
-						ThePlaylist.Add(GoodList[goodInd++]);
-						ThePlaylist.Add(AllSongs[i++]);
-
-						try {
+							ThePlaylist.Add(GoodList[goodInd++]);
 							ThePlaylist.Add(AllSongs[i++]);
+
+							try {
+								ThePlaylist.Add(AllSongs[i++]);
+							}
+							catch (Exception) {
+								break;
+							}
+
+							try {
+								ThePlaylist.Add(AllSongs[i]);
+							}
+							catch (Exception) {
+								break;
+							}
 						}
-						catch (Exception) {
-							break;
-						}
+						break;
+					#endregion JPopFallWinter
+					#region JPopSpringSummer
+					case PType.JPopSpringSummer:
+						exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
 
-						try {
-							ThePlaylist.Add(AllSongs[i]);
-						}
-						catch (Exception) {
-							break;
-						}
-					}
-					break;
-				#endregion JPopFallWinter
-				#region JPopSpringSummer
-				case PType.JPopSpringSummer:
-					exclusions = new string[] { @"\_Album", @"_Christmas", @"_FallWinter" };
+						// Step 1: Get all songs //
+						files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
+						for (int i = 0; i < files.Count; i++)
+							AllSongs.Add(new SongFileInfo(files[i]));
 
-					// Step 1: Get all songs //
-					files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
-					for (int i = 0; i < files.Count; i++)
-						AllSongs.Add(new SongFileInfo(files[i]));
+						AllSongsCount = AllSongs.Count;
 
-					AllSongsCount = AllSongs.Count;
+						// Step 2: Create GoodList //
+						GoodJPopSpringSummerSongs = GoodJPopSpringSummerSongs.Union(GoodJPopSongs).ToList();
+						GoodList = AllSongs.Where(x => GoodJPopSpringSummerSongs.Contains(x))
+							.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+						GoodListCount = GoodList.Count;
 
-					// Step 2: Create GoodList //
-					GoodJPopSpringSummerSongs.Union(GoodJPopSongs);
-					GoodList = AllSongs.Where(x => GoodJPopSpringSummerSongs.Contains(x))
-						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-					GoodListCount = GoodList.Count;
+						// Step 3: Create NewList // Ignored for J-Pop lists //
+						// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
 
-					// Step 3: Create NewList // Ignored for J-Pop lists //
-					// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
+						// Step 5: Create ThePlaylist //
+						AllSongs = AllSongs.Except(GoodList).ToList();
+						AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+						goodInd = 0;
 
-					// Step 5: Create ThePlaylist //
-					AllSongs = AllSongs.Except(GoodList).ToList();
-					AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
-					goodInd = 0;
+						for (int i = 0; i < AllSongs.Count; i++) {
+							if (goodInd == GoodListCount)
+								goodInd = 0;
 
-					for (int i = 0; i < AllSongs.Count; i++) {
-						if (goodInd == GoodListCount)
-							goodInd = 0;
-
-						ThePlaylist.Add(GoodList[goodInd++]);
-						ThePlaylist.Add(AllSongs[i++]);
-
-						try {
+							ThePlaylist.Add(GoodList[goodInd++]);
 							ThePlaylist.Add(AllSongs[i++]);
-						}
-						catch (Exception) {
-							break;
-						}
 
-						try {
-							ThePlaylist.Add(AllSongs[i]);
+							try {
+								ThePlaylist.Add(AllSongs[i++]);
+							}
+							catch (Exception) {
+								break;
+							}
+
+							try {
+								ThePlaylist.Add(AllSongs[i]);
+							}
+							catch (Exception) {
+								break;
+							}
 						}
-						catch (Exception) {
-							break;
-						}
-					}
-					break;
-				#endregion JPopSpringSummer
-				default:
-					break;
+						break;
+					#endregion JPopSpringSummer
+					default:
+						break;
+				}
+			}
+
+			catch (Exception ex) {
+				string error;
+
+				if (ex.InnerException == null)
+					error = String.Format("{0}{2}Exception thrown in Playlist.Create(string musicFolder='{3}').{2}{1}{2}{2}", ex.Message, ex.ToString(), Environment.NewLine, musicFolder);
+				else
+					error = String.Format("{0}{2}Exception thrown in INNER EXCEPTION of Playlist.Create(string musicFolder='{3}').{2}{1}{2}{2}", ex.InnerException.Message, ex.InnerException.ToString(), Environment.NewLine, musicFolder);
+
+				Console.Write("\n{0}", error);
 			}
 		}
 
