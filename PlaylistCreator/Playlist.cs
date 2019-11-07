@@ -59,13 +59,13 @@ namespace PlaylistCreator
 			new SongFileInfo("Zedd", "Clarity"),
 		};
 		#endregion GoodEnglishSongs
-		#region public List<SongFileInfo> GoodSongsJPopSpringSummer = new List<SongFileInfo> {
-		public List<SongFileInfo> GoodSongsJPopSpringSummer = new List<SongFileInfo> {
+		#region public List<SongFileInfo> GoodJPopSongsSpringSummer = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodJPopSongsSpringSummer = new List<SongFileInfo> {
 			new SongFileInfo("Yuzu", "Natsu Iro"),
 		};
-		#endregion GoodSongsJPopSpringSummer
-		#region public List<SongFileInfo> GoodSongsJPopFallWinter = new List<SongFileInfo> {
-		public List<SongFileInfo> GoodSongsJPopFallWinter = new List<SongFileInfo> {
+		#endregion GoodJPopSongsSpringSummer
+		#region public List<SongFileInfo> GoodJPopSongsFallWinter = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodJPopSongsFallWinter = new List<SongFileInfo> {
 			new SongFileInfo("Amuro Namie", "a walk in the park"),
 			new SongFileInfo("Exile", "lovers again"),
 			new SongFileInfo("Glay", "winter, again"),
@@ -76,9 +76,9 @@ namespace PlaylistCreator
 			new SongFileInfo("L'Arc~en~Ciel", "winter fall"),
 			new SongFileInfo("Remioromen", "konayuki"),
 		};
-		#endregion GoodSongsJPopFallWinter
-		#region public List<SongFileInfo> GoodSongsJPop = new List<SongFileInfo> {
-		public List<SongFileInfo> GoodSongsJPop = new List<SongFileInfo> {
+		#endregion GoodJPopSongsFallWinter
+		#region public List<SongFileInfo> GoodJPopSongs = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodJPopSongs = new List<SongFileInfo> {
 			new SongFileInfo("Amuro Namie", "Can You Celebrate"),
 			new SongFileInfo("Brilliant Green", "There Will Be Love There"),
 			new SongFileInfo("Chemistry", "Floatin'"),
@@ -116,7 +116,7 @@ namespace PlaylistCreator
 			new SongFileInfo("Wands", "Sekai ga Owaru Madewa"),
 			new SongFileInfo("Wands", "Sekaijuu no Dare Yori Kitto"),
 		};
-		#endregion GoodSongsJPop
+		#endregion GoodJPopSongs
 		public DateTime NewSongThreshold;
 
 		private FileUtil _fileUtil;
@@ -223,8 +223,8 @@ namespace PlaylistCreator
 					AllSongsCount = AllSongs.Count;
 
 					// Step 2: Create GoodList //
-					GoodSongsJPopFallWinter.Union(GoodSongsJPop);
-					GoodList = AllSongs.Where(x => GoodSongsJPopFallWinter.Contains(x))
+					GoodJPopSongsFallWinter.Union(GoodJPopSongs);
+					GoodList = AllSongs.Where(x => GoodJPopSongsFallWinter.Contains(x))
 						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 					GoodListCount = GoodList.Count;
 
@@ -271,8 +271,8 @@ namespace PlaylistCreator
 					AllSongsCount = AllSongs.Count;
 
 					// Step 2: Create GoodList //
-					GoodSongsJPopSpringSummer.Union(GoodSongsJPop);
-					GoodList = AllSongs.Where(x => GoodSongsJPopSpringSummer.Contains(x))
+					GoodJPopSongsSpringSummer.Union(GoodJPopSongs);
+					GoodList = AllSongs.Where(x => GoodJPopSongsSpringSummer.Contains(x))
 						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 					GoodListCount = GoodList.Count;
 
