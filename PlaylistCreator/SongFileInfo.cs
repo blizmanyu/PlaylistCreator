@@ -207,13 +207,19 @@ namespace PlaylistCreator
 			if (obj == null || !this.GetType().Equals(obj.GetType()))
 				return false;
 
-			var other = (SongFileInfo) obj;
-			var thisArtist = this.Artist.ToUpper();
-			var thisTitle = this.Title.ToUpper();
-			var otherArtist = other.Artist.ToUpper();
-			var otherTitle = other.Title.ToUpper();
+			try {
+				var other = (SongFileInfo) obj;
+				var thisArtist = this.Artist.ToUpper();
+				var thisTitle = this.Title.ToUpper();
+				var otherArtist = other.Artist.ToUpper();
+				var otherTitle = other.Title.ToUpper();
 
-			return otherArtist.StartsWith(thisArtist) && otherTitle.StartsWith(thisTitle);
+				return otherArtist.StartsWith(thisArtist) && otherTitle.StartsWith(thisTitle);
+			}
+
+			catch (Exception) {
+				return false;
+			}
 		}
 
 		public override int GetHashCode()
