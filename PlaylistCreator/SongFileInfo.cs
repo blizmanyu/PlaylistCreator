@@ -215,6 +215,25 @@ namespace PlaylistCreator
 			Console.Write("\n");
 		}
 
+		public override bool Equals(Object obj)
+		{
+			if (obj == null || !this.GetType().Equals(obj.GetType()))
+				return false;
+
+			var other = (SongFileInfo) obj;
+			var thisArtist = this.Artist.ToUpper();
+			var thisTitle = this.Title.ToUpper();
+			var otherArtist = other.Artist.ToUpper();
+			var otherTitle = other.Title.ToUpper();
+
+			return ((thisArtist.StartsWith(otherArtist) || otherArtist.StartsWith(thisArtist)) && (thisTitle.StartsWith(otherTitle) || otherTitle.StartsWith(thisTitle)));
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
+
 		public override string ToString()
 		{
 			return String.Format("{0} - {1}", Artist, Title);
