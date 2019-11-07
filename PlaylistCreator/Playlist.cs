@@ -16,7 +16,7 @@ namespace PlaylistCreator
 			new SongFileInfo("Acceptance", "Different"),
 			new SongFileInfo("Ariana Grande", "One Last Time"),
 			new SongFileInfo("Audioslave", "Like A Stone"),
-			new SongFileInfo("Avicii", "Wainting For Love"),
+			new SongFileInfo("Avicii", "Waiting For Love"),
 			new SongFileInfo("Childish Gambino", "All The Shine"),
 			new SongFileInfo("Childish Gambino", "Heartbeat"),
 			new SongFileInfo("Childish Gambino", "IV. Sweatpants"),
