@@ -11,8 +11,8 @@ namespace PlaylistCreator
 		public enum PType { English, JPopFallWinter, JPopSpringSummer };
 		public PType Type;
 		public string Name;
-		#region public SongFileInfo[] GoodEnglishSongs = new SongFileInfo[] {
-		public SongFileInfo[] GoodEnglishSongs = new SongFileInfo[] {
+		#region public List<SongFileInfo> GoodEnglishSongs = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodEnglishSongs = new List<SongFileInfo> {
 			new SongFileInfo("Acceptance", "Different"),
 			new SongFileInfo("Ariana Grande", "One Last Time"),
 			new SongFileInfo("Audioslave", "Like A Stone"),
@@ -58,7 +58,7 @@ namespace PlaylistCreator
 			new SongFileInfo("U2", "With Or Without You"),
 			new SongFileInfo("Zedd", "Clarity"),
 		};
-		#endregion public SongFileInfo[] GoodEnglishSongs
+		#endregion public List<SongFileInfo> GoodEnglishSongs
 		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string> {
 			"Natsu Iro", // Yuzu //
 		};
@@ -159,11 +159,53 @@ namespace PlaylistCreator
 			string[] exclusions;
 
 			switch (Type) {
-				#region TODO: case PType.English
+				#region English
 				case PType.English:
-					throw new Exception("Not supported yet.");
+					exclusions = new string[] { @"\Album", @"\Classical", @"\J-Pop", @"\Spanish", };
+
+					// Step 1: Get all songs //
+					files = _fileUtil.GetAllAudioFiles(musicFolder, exclusions);
+					for (int i = 0; i < files.Count; i++)
+						AllSongs.Add(new SongFileInfo(files[i]));
+
+					AllSongsCount = AllSongs.Count;
+
+					// Step 2: Create GoodList //
+					GoodList = AllSongs.Where(x => GoodEnglishSongs.Contains(x))
+						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+					GoodListCount = GoodList.Count;
+
+					// Step 3: Create NewList // Ignored for J-Pop lists //
+					// Step 4: Create NewPlusGoodList // Ignored for J-Pop lists //
+
+					// Step 5: Create ThePlaylist //
+					AllSongs = AllSongs.Except(GoodList).ToList();
+					AllSongs = AllSongs.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
+					goodInd = 0;
+
+					for (int i = 0; i < AllSongs.Count; i++) {
+						if (goodInd == GoodListCount)
+							goodInd = 0;
+
+						ThePlaylist.Add(GoodList[goodInd++]);
+						ThePlaylist.Add(AllSongs[i++]);
+
+						try {
+							ThePlaylist.Add(AllSongs[i++]);
+						}
+						catch (Exception) {
+							break;
+						}
+
+						try {
+							ThePlaylist.Add(AllSongs[i]);
+						}
+						catch (Exception) {
+							break;
+						}
+					}
 					break;
-				#endregion TODO: case PType.English
+				#endregion English
 				#region JPopFallWinter
 				case PType.JPopFallWinter:
 					exclusions = new string[] { @"\_Album", @"_Christmas", @"_SpringSummer" };
