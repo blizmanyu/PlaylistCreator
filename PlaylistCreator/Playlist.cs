@@ -11,9 +11,54 @@ namespace PlaylistCreator
 		public enum PType { English, JPopFallWinter, JPopSpringSummer };
 		public PType Type;
 		public string Name;
-		public HashSet<string> GoodSongsEnglish = new HashSet<string> {
-			"asdfasdf",
+		#region public SongFileInfo[] GoodEnglishSongs = new SongFileInfo[] {
+		public SongFileInfo[] GoodEnglishSongs = new SongFileInfo[] {
+			new SongFileInfo("Acceptance", "Different"),
+			new SongFileInfo("Ariana Grande", "One Last Time"),
+			new SongFileInfo("Audioslave", "Like A Stone"),
+			new SongFileInfo("Avicii", "Wainting For Love"),
+			new SongFileInfo("Childish Gambino", "All The Shine"),
+			new SongFileInfo("Childish Gambino", "Heartbeat"),
+			new SongFileInfo("Childish Gambino", "IV. Sweatpants"),
+			new SongFileInfo("Dashboard Confessional", "Hands Down (Acoustic)"),
+			new SongFileInfo("Frank Ocean", "Thinkin Bout You"),
+			new SongFileInfo("Gnash", "first day of my life"),
+			new SongFileInfo("Gnash", "i hate you, i love you (PBH & Jack Shizzle Remix)"),
+			new SongFileInfo("Gwen Stefani", "Cool"),
+			new SongFileInfo("Jessie J", "Who You Are"),
+			new SongFileInfo("Jessie Ware", "Say You Love Me"),
+			new SongFileInfo("Jessie Ware", "Wildest Moments"),
+			new SongFileInfo("John Legend", "All Of Me"),
+			new SongFileInfo("John Legend", "Everybody Knows"),
+			new SongFileInfo("John Legend", "Ordinary People"),
+			new SongFileInfo("Kai", "It Might Be You"),
+			new SongFileInfo("Lianne La Havas", "Lost & Found"),
+			new SongFileInfo("Louisa Wendorff", "Style (Cover)"),
+			new SongFileInfo("Maroon 5", "Give A Little More"),
+			new SongFileInfo("Maroon 5", "Must Get Out"),
+			new SongFileInfo("Maroon 5", "Never Gonna Leave This Bed (Acoustic)"),
+			new SongFileInfo("Maroon 5", "nothing lasts forever"),
+			new SongFileInfo("Maroon 5", "Sunday Morning"),
+			new SongFileInfo("Maroon 5", "Sweetest Goodbye"),
+			new SongFileInfo("Maroon 5", "The Sun"),
+			new SongFileInfo("Maroon 5", "Through With You"),
+			new SongFileInfo("Maroon 5", "won't go home without you"),
+			new SongFileInfo("MK", "Piece Of Me"),
+			new SongFileInfo("Seal", "Kiss From A Rose"),
+			new SongFileInfo("Silk City", "Electricity"),
+			new SongFileInfo("Silversun Pickups", "Panic Switch"),
+			new SongFileInfo("Sonny Alven", "Our Youth"),
+			new SongFileInfo("Taylor Swift", "Blank Space"),
+			new SongFileInfo("Taylor Swift", "Style"),
+			new SongFileInfo("Taylor Swift", "Wildest Dreams"),
+			new SongFileInfo("The Him", "Feels Like Home"),
+			new SongFileInfo("The Script", "Breakeven"),
+			new SongFileInfo("The Temper Trap", "Love Lost"),
+			new SongFileInfo("Three Days Grace", "Never Too Late"),
+			new SongFileInfo("U2", "With Or Without You"),
+			new SongFileInfo("Zedd", "Clarity"),
 		};
+		#endregion public SongFileInfo[] GoodEnglishSongs
 		public HashSet<string> GoodSongsJPopSpringSummer = new HashSet<string> {
 			"Natsu Iro", // Yuzu //
 		};
