@@ -64,8 +64,8 @@ namespace PlaylistCreator
 			new SongFileInfo("Yuzu", "Natsu Iro"),
 		};
 		#endregion GoodJPopSpringSummerSongs
-		#region public List<SongFileInfo> GoodJPopSongsFallWinter = new List<SongFileInfo> {
-		public List<SongFileInfo> GoodJPopSongsFallWinter = new List<SongFileInfo> {
+		#region public List<SongFileInfo> GoodJPopFallWinterSongs = new List<SongFileInfo> {
+		public List<SongFileInfo> GoodJPopFallWinterSongs = new List<SongFileInfo> {
 			new SongFileInfo("Amuro Namie", "a walk in the park"),
 			new SongFileInfo("Exile", "lovers again"),
 			new SongFileInfo("Glay", "winter, again"),
@@ -76,7 +76,7 @@ namespace PlaylistCreator
 			new SongFileInfo("L'Arc~en~Ciel", "winter fall"),
 			new SongFileInfo("Remioromen", "konayuki"),
 		};
-		#endregion GoodJPopSongsFallWinter
+		#endregion GoodJPopFallWinterSongs
 		#region public List<SongFileInfo> GoodJPopSongs = new List<SongFileInfo> {
 		public List<SongFileInfo> GoodJPopSongs = new List<SongFileInfo> {
 			new SongFileInfo("Amuro Namie", "Can You Celebrate"),
@@ -223,8 +223,8 @@ namespace PlaylistCreator
 					AllSongsCount = AllSongs.Count;
 
 					// Step 2: Create GoodList //
-					GoodJPopSongsFallWinter.Union(GoodJPopSongs);
-					GoodList = AllSongs.Where(x => GoodJPopSongsFallWinter.Contains(x))
+					GoodJPopFallWinterSongs.Union(GoodJPopSongs);
+					GoodList = AllSongs.Where(x => GoodJPopFallWinterSongs.Contains(x))
 						.OrderBy(x => x.Title).ThenBy(y => y.Artist).ToList();
 					GoodListCount = GoodList.Count;
 
