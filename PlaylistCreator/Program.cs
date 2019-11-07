@@ -141,7 +141,19 @@ namespace PlaylistCreator
 			var openFolder = true;
 			var destFolder = playlistFolder;
 
-			// JPopSpringSummer //
+			#region English
+			var EnglishPlaylist = new Playlist(Playlist.PType.English);
+			EnglishPlaylist.Create(@"C:\Music\00 Genres\");
+			EnglishPlaylist.WriteForWinamp(destFolder);
+			EnglishPlaylist.WriteForITunes(destFolder);
+
+			if (openFolder) {
+				Process.Start("explorer.exe", destFolder);
+				openFolder = false;
+			}
+			#endregion English
+
+			#region JPopSpringSummer
 			var playlist1 = new Playlist(Playlist.PType.JPopSpringSummer);
 			playlist1.Create(@"C:\Music\00 Genres\J-Pop\");
 			playlist1.WriteForWinamp(destFolder);
@@ -151,8 +163,9 @@ namespace PlaylistCreator
 				Process.Start("explorer.exe", destFolder);
 				openFolder = false;
 			}
+			#endregion JPopSpringSummer
 
-			// JPopFallWinter //
+			#region JPopFallWinter
 			var playlist2 = new Playlist(Playlist.PType.JPopFallWinter);
 			playlist2.Create(@"C:\Music\00 Genres\J-Pop\");
 			playlist2.WriteForWinamp(destFolder);
@@ -162,6 +175,7 @@ namespace PlaylistCreator
 				Process.Start("explorer.exe", destFolder);
 				openFolder = false;
 			}
+			#endregion JPopFallWinter
 
 			//if (doJpop) {
 			//	DoJpop();
